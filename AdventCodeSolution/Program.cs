@@ -1,4 +1,6 @@
 ﻿using AdventCodeSolution.Day1;
+using AdventCodeSolution.Day10;
+using AdventCodeSolution.Day11;
 using AdventCodeSolution.Day2;
 using AdventCodeSolution.Day3;
 using AdventCodeSolution.Day4;
@@ -39,7 +41,13 @@ namespace AdventCodeSolution
             //Day8Solution.SolvePartTwo();
 
             //Day9Solution.SolvePartOne();
-            Day9Solution.SolvePartTwo();
+            //Day9Solution.SolvePartTwo();
+
+            //Day10Solution.SolvePartOne();
+            //Day10Solution.SolvePartTwo();
+
+            //Day11Solution.SolvePartOne();
+            Day11Solution.SolvePartTwo();
         }
     }
 }

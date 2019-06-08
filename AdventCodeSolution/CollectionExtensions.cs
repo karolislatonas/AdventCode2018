@@ -139,5 +139,16 @@ namespace AdventCodeSolution
                 current = current.Previous ?? linkedList.Last;
             } 
         }
+
+        public static IEnumerable<int> EnumerateFrom(this int start)
+        {
+            var current = start;
+
+            do
+            {
+                yield return current;
+                current++;
+            } while (true);
+        }
     }
 }

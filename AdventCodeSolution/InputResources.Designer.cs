@@ -61,6 +61,35 @@ namespace AdventCodeSolution {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to position=&lt; 21373,  53216&gt; velocity=&lt;-2, -5&gt;
+        ///position=&lt;-10460, -31621&gt; velocity=&lt; 1,  3&gt;
+        ///position=&lt; 21353, -42222&gt; velocity=&lt;-2,  4&gt;
+        ///position=&lt; 53136, -52828&gt; velocity=&lt;-5,  5&gt;
+        ///position=&lt; 42542, -21012&gt; velocity=&lt;-4,  2&gt;
+        ///position=&lt;-42304, -10407&gt; velocity=&lt; 4,  1&gt;
+        ///position=&lt; 21337,  21407&gt; velocity=&lt;-2, -2&gt;
+        ///position=&lt;-42297,  42612&gt; velocity=&lt; 4, -4&gt;
+        ///position=&lt; 31921, -42227&gt; velocity=&lt;-3,  4&gt;
+        ///position=&lt;-21087,  10800&gt; velocity=&lt; 2, -1&gt;
+        ///position=&lt;-52877, -31621&gt; velocity=&lt; 5,  3&gt;
+        ///position=&lt; 42532, [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Day10Input {
+            get {
+                return ResourceManager.GetString("Day10Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1308.
+        /// </summary>
+        internal static string Day11Input {
+            get {
+                return ResourceManager.GetString("Day11Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to +16
         ///-2
         ///-5

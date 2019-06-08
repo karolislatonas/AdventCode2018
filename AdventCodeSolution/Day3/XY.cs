@@ -26,18 +26,22 @@ namespace AdventCodeSolution.Day3
 
         public static XY operator -(XY left, XY right) => new XY(left.X - right.X, left.Y - right.Y);
 
+        public static XY operator *(XY left, int scale) => new XY(left.X * scale, left.Y * scale);
+
         public int GetManhattanDistance(XY other)
         {
             return Abs(X - other.X) + Abs(Y - other.Y);
         }
 
-        protected override int GetHashCodeCore() => X ^ Y;
+        protected override int GetHashCodeCore() => 17 ^ X ^ Y;
 
         protected override bool EqualsCore(XY other)
         {
             return X == other.X &&
                 Y == other.Y;
         }
+
+        public override string ToString() => $"{X},{Y}";
 
         public static XY Parse(string input, char seperator)
         {
