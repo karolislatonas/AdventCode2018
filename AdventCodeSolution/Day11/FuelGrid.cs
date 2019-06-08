@@ -17,25 +17,25 @@ namespace AdventCodeSolution.Day11
             this.gridSerialNumber = gridSerialNumber;
         }
 
-        public (Square square, int powerLevel) GetPositionOfLargestPowerSquare(int squareSize)
+        public (Square square, int powerLevel) GetSquareWithLargestPower(int squareSize)
         {
-            return EnumerateSquarePowerLevelsOfSize(squareSize).MaxBy(s => s.powerLevel);
+            return EnumerateSquarePowersOfSize(squareSize).MaxBy(s => s.powerLevel);
         }
 
-        public (Square square, int powerLevel) GetPositionOfTotalLargestPowerSquare()
+        public (Square square, int powerLevel) GetSquareWithLargestPower()
         {
             return Enumerable.Range(1, gridSize)
                 .AsParallel()
-                .Select(s => GetPositionOfLargestPowerSquare(s))
+                .Select(s => GetSquareWithLargestPower(s))
                 .MaxBy(s => s.powerLevel);
         }
 
-        private IEnumerable<(Square square, int powerLevel)> EnumerateSquarePowerLevelsOfSize(int squareSize)
+        private IEnumerable<(Square square, int powerLevel)> EnumerateSquarePowersOfSize(int squareSize)
         {
             var maxSize = gridSize - squareSize + 1;
             var firstSquare = new Square(GridStart, squareSize);
 
-            var currentSquarePower = (square: firstSquare, power: GetPowerLevelInSquare(firstSquare));
+            var currentSquarePower = (square: firstSquare, power: GetSquarePower(firstSquare));
             var previousLeftSideSquarePower = currentSquarePower;
 
             yield return currentSquarePower;
@@ -68,29 +68,29 @@ namespace AdventCodeSolution.Day11
         {
             var startRightFuelsToAdd = new XY(square.Position.X + square.Size, square.Position.Y);
 
-            var leftPowerToRemove = EnumerateRectanglePositions(square.Position, 1, square.Size);
-            var rightPowerToAdd = EnumerateRectanglePositions(startRightFuelsToAdd, 1, square.Size);
+            var leftPowersToRemove = EnumerateRectanglePositions(square.Position, 1, square.Size);
+            var rightPowersToAdd = EnumerateRectanglePositions(startRightFuelsToAdd, 1, square.Size);
 
             return squarePower
-                - SumPowerLevelOfCoordinates(leftPowerToRemove)
-                + SumPowerLevelOfCoordinates(rightPowerToAdd);
+                - SumPower(leftPowersToRemove)
+                + SumPower(rightPowersToAdd);
         }
 
         private int CalculateNextUpperSquarePower(Square square, int squarePower)
         {
             var startOfUpperFuelsToAdd = new XY(square.Position.X, square.Position.Y + square.Size);
 
-            var bottomPowerToRemove = EnumerateRectanglePositions(square.Position, square.Size, 1);
-            var topPowerToAdd = EnumerateRectanglePositions(startOfUpperFuelsToAdd, square.Size, 1);
+            var bottomPowersToRemove = EnumerateRectanglePositions(square.Position, square.Size, 1);
+            var topPowersToAdd = EnumerateRectanglePositions(startOfUpperFuelsToAdd, square.Size, 1);
 
             return squarePower
-                - SumPowerLevelOfCoordinates(bottomPowerToRemove)
-                + SumPowerLevelOfCoordinates(topPowerToAdd);
+                - SumPower(bottomPowersToRemove)
+                + SumPower(topPowersToAdd);
         }
 
-        private int GetPowerLevelInSquare(Square square) => EnumerateSquarePositions(square).Sum(xy => CalculatePowerLevel(xy, gridSerialNumber));
+        private int GetSquarePower(Square square) => EnumerateSquarePositions(square).Sum(xy => CalculatePower(xy, gridSerialNumber));
 
-        private int SumPowerLevelOfCoordinates(IEnumerable<XY> xys) => xys.Sum(xy => CalculatePowerLevel(xy, gridSerialNumber));
+        private int SumPower(IEnumerable<XY> xys) => xys.Sum(xy => CalculatePower(xy, gridSerialNumber));
 
         private static IEnumerable<XY> EnumerateSquarePositions(Square square) => EnumerateRectanglePositions(square.Position, square.Size, square.Size);
 
@@ -101,7 +101,7 @@ namespace AdventCodeSolution.Day11
                     yield return new XY(start.X + x, start.Y + y);
         }
 
-        private static int CalculatePowerLevel(XY position, int gridSerialNumber)
+        private static int CalculatePower(XY position, int gridSerialNumber)
         {
             var rackId = position.X + 10;
 

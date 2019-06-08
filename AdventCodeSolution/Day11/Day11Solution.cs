@@ -11,7 +11,7 @@ namespace AdventCodeSolution.Day11
 
             var fuelGrid = new FuelGrid(gridSerialNumber, 300);
 
-            var (square, powerLevel) = fuelGrid.GetPositionOfLargestPowerSquare(3);
+            var (square, powerLevel) = fuelGrid.GetSquareWithLargestPower(3);
 
             square.Position.WriteLine("Day 11, Part One: ");
         }
@@ -24,7 +24,7 @@ namespace AdventCodeSolution.Day11
 
             var stopwatch = Stopwatch.StartNew();
 
-            var squarePower = fuelGrid.GetPositionOfTotalLargestPowerSquare();
+            var squarePower = fuelGrid.GetSquareWithLargestPower();
 
             squarePower.square.WriteLine($"Day 11, Part One: ");
             stopwatch.ElapsedMilliseconds.WriteLine();
