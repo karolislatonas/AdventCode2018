@@ -90,6 +90,48 @@ namespace AdventCodeSolution {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to initial state: ..#..###...#####.#.#...####.#..####..###.##.#.#.##.#....#....#.####...#....###.###..##.#....#######
+        ///
+        ///..### =&gt; .
+        ///.##.# =&gt; #
+        ///#..#. =&gt; .
+        ///#.#.# =&gt; #
+        ///###.. =&gt; #
+        ///.#..# =&gt; .
+        ///##..# =&gt; #
+        ///.###. =&gt; #
+        ///..#.. =&gt; .
+        ///..... =&gt; .
+        ///##### =&gt; .
+        ///.#... =&gt; #
+        ///...#. =&gt; #
+        ///#...# =&gt; #
+        ///####. =&gt; .
+        ///.#### =&gt; .
+        ///##.## =&gt; #
+        ///...## =&gt; .
+        ///..##. =&gt; .
+        ///#.##. =&gt; .
+        ///#.... =&gt; .
+        ///.#.#. =&gt; .
+        ///..#.# =&gt; #
+        ///#.#.. =&gt; #
+        ///##... =&gt; #
+        ///##.#. =&gt; .
+        ///#..## =&gt; .
+        ///.##.. =&gt; .
+        ///#.### =&gt; .
+        ///....# =&gt; .
+        ///.#.## =&gt; #
+        ///###.# =&gt; #.
+        /// </summary>
+        internal static string Day12Input {
+            get {
+                return ResourceManager.GetString("Day12Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to +16
         ///-2
         ///-5
