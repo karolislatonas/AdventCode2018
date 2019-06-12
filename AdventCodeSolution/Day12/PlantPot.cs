@@ -7,14 +7,14 @@ namespace AdventCodeSolution.Day12
         private const char PotWithPlantSymbol = '#';
         public const char EmptyPotSymbol = '.';
 
-        public PlantPot(int number, bool containsPlant)
+        public PlantPot(long number, bool containsPlant)
         {
             Number = number;
             ContainsPlant = containsPlant;
             PotSymbol = ContainsPlant ? PotWithPlantSymbol : EmptyPotSymbol;
         }
 
-        public int Number { get; }
+        public long Number { get; }
 
         public bool ContainsPlant { get; }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using static System.Math;
 
 namespace AdventCodeSolution.Day12
@@ -20,64 +21,95 @@ namespace AdventCodeSolution.Day12
         {
             if (generation < 0) throw new ArgumentOutOfRangeException(nameof(generation), "Generation cannot be lower than 0");
 
-            var generations = EnumerateGenerations().GetEnumerator();
+            var generations = EnumerateGenerations(generation).GetEnumerator();
 
             var currentGeneration = (long)0;
-            while (true)
-            {
-                generations.MoveNext();
+            var current = generations.Current;
 
-                var current = generations.Current;
+            while (generations.MoveNext())
+            {
+                current = generations.Current;
                 if (currentGeneration == generation)
                     return current;
 
                 currentGeneration++;
             }
+
+            return current;
         }
 
-        private IEnumerable<PlantPot[]> EnumerateGenerations()
+        private IEnumerable<PlantPot[]> EnumerateGenerations(long tillGeneration)
         {
+            string ToPattern(IEnumerable<PlantPot> pots) => pots.Aggregate(new StringBuilder(), (t, c) => t.Append(c.PotSymbol)).ToString().Trim('.');
+
             var currentGeneration = initialState.ToArray();
+            var currentGenerationPattern = ToPattern(currentGeneration);
+            var currentGenerationNumber = (long)0;
 
             do
             {
                 yield return currentGeneration;
 
-                var nextPlantGeneration = new List<PlantPot>((int)(currentGeneration.Length * 1.10));
-                for(var i = -2; i < currentGeneration.Length + 1; i++)
+                var nextGeneration = CreateNextGeneration(currentGeneration);
+                var nextGenerationPattern = ToPattern(nextGeneration);
+
+                var isSameAsPrevious = nextGenerationPattern == currentGenerationPattern;
+                if (isSameAsPrevious)
                 {
-                    var pattern = GetPotNeighboursOfIndex(currentGeneration, i);
+                    var timesToMoveDiff = tillGeneration - currentGenerationNumber;
+                    var diffToAdd = timesToMoveDiff * (nextGeneration[0].Number - currentGeneration[0].Number);
 
-                    if(!rules.TryGetValue(pattern, out var hasPotPlantInNextGeneration))
-                    {
-                        hasPotPlantInNextGeneration = false;
-                    }   
-
-                    var potNumber = GetPotNumber(currentGeneration, i);
-                    nextPlantGeneration.Add(new PlantPot(potNumber, hasPotPlantInNextGeneration));
+                    yield return currentGeneration.Select(p => new PlantPot(p.Number + diffToAdd, p.ContainsPlant)).ToArray();
+                    yield break;
                 }
 
-                currentGeneration = nextPlantGeneration.SkipWhile(p => !p.ContainsPlant).ToArray();
+                currentGeneration = nextGeneration;
+                currentGenerationPattern = nextGenerationPattern;
+                currentGenerationNumber += 1; 
 
-            } while (true);
+            } while (tillGeneration != currentGenerationNumber);
+
+            yield return currentGeneration;
+        }
+
+        private PlantPot[] CreateNextGeneration(PlantPot[] currentGeneration)
+        {
+            var nextPlantGeneration = new List<PlantPot>(currentGeneration.Length + 4);
+
+            for (var i = -2; i < currentGeneration.Length + 2; i++)
+            {
+                var pattern = GetPotNeighboursOfIndex(currentGeneration, i);
+
+                if (!rules.TryGetValue(pattern, out var hasPotPlantInNextGeneration))
+                {
+                    hasPotPlantInNextGeneration = false;
+                }
+
+                var potNumber = GetPotNumberAtIndex(currentGeneration, i);
+                nextPlantGeneration.Add(new PlantPot(potNumber, hasPotPlantInNextGeneration));
+            }
+
+            return nextPlantGeneration.SkipWhile(p => !p.ContainsPlant).ToArray();
         }
 
         private string GetPotNeighboursOfIndex(PlantPot[] plantPots, int index)
         {
-            bool IsIndexInRange(int i) => 0 <= i && i < plantPots.Length;
+            const int neigbourCountFromOneSide = 2;
 
-            var neighbourPlants = Enumerable.Range(index - 2, 5)
-                .Select(i => IsIndexInRange(i) ? plantPots[i].PotSymbol : PlantPot.EmptyPotSymbol)
+            var startIndex = index - neigbourCountFromOneSide;
+            var totalPots = neigbourCountFromOneSide * 2 + 1;
+
+            var neighbourPlants = Enumerable
+                .Range(startIndex, totalPots)
+                .Select(i => plantPots.IsIndexInRange(index) ? plantPots[i].PotSymbol : PlantPot.EmptyPotSymbol)
                 .ToArray();
 
             return new string(neighbourPlants);
         }
 
-        private int GetPotNumber(PlantPot[] plantPots, int index)
+        private long GetPotNumberAtIndex(PlantPot[] plantPots, int index)
         {
-            bool IsIndexInRange(int i) => 0 <= i && i < plantPots.Length;
-
-            if (IsIndexInRange(index))
+            if (plantPots.IsIndexInRange(index))
             {
                 return plantPots[index].Number;
             }

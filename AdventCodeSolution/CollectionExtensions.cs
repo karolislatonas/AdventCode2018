@@ -150,5 +150,7 @@ namespace AdventCodeSolution
                 current++;
             } while (true);
         }
+
+        public static bool IsIndexInRange<T>(this IList<T> list, int i) => 0 <= i && i < list.Count;
     }
 }
