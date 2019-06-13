@@ -21,24 +21,10 @@ namespace AdventCodeSolution.Day12
         {
             if (generation < 0) throw new ArgumentOutOfRangeException(nameof(generation), "Generation cannot be lower than 0");
 
-            var generations = EnumerateGenerations(generation).GetEnumerator();
-
-            var currentGeneration = (long)0;
-            var current = generations.Current;
-
-            while (generations.MoveNext())
-            {
-                current = generations.Current;
-                if (currentGeneration == generation)
-                    return current;
-
-                currentGeneration++;
-            }
-
-            return current;
+            return GetPlantsOfGenerations(generation);
         }
 
-        private IEnumerable<PlantPot[]> EnumerateGenerations(long tillGeneration)
+        private PlantPot[] GetPlantsOfGenerations(long tillGeneration)
         {
             string ToPattern(IEnumerable<PlantPot> pots) => pots.Aggregate(new StringBuilder(), (t, c) => t.Append(c.PotSymbol)).ToString().Trim('.');
 
@@ -46,11 +32,9 @@ namespace AdventCodeSolution.Day12
             var currentGenerationPattern = ToPattern(currentGeneration);
             var currentGenerationNumber = (long)0;
 
-            do
+            while (currentGenerationNumber < tillGeneration)
             {
-                yield return currentGeneration;
-
-                var nextGeneration = CreateNextGeneration(currentGeneration);
+                var nextGeneration = CalculateNextGeneration(currentGeneration);
                 var nextGenerationPattern = ToPattern(nextGeneration);
 
                 var isSameAsPrevious = nextGenerationPattern == currentGenerationPattern;
@@ -59,20 +43,18 @@ namespace AdventCodeSolution.Day12
                     var timesToMoveDiff = tillGeneration - currentGenerationNumber;
                     var diffToAdd = timesToMoveDiff * (nextGeneration[0].Number - currentGeneration[0].Number);
 
-                    yield return currentGeneration.Select(p => new PlantPot(p.Number + diffToAdd, p.ContainsPlant)).ToArray();
-                    yield break;
+                    return currentGeneration.Select(p => new PlantPot(p.Number + diffToAdd, p.ContainsPlant)).ToArray();
                 }
 
                 currentGeneration = nextGeneration;
                 currentGenerationPattern = nextGenerationPattern;
-                currentGenerationNumber += 1; 
+                currentGenerationNumber += 1;
+            } 
 
-            } while (tillGeneration != currentGenerationNumber);
-
-            yield return currentGeneration;
+            return currentGeneration;
         }
 
-        private PlantPot[] CreateNextGeneration(PlantPot[] currentGeneration)
+        private PlantPot[] CalculateNextGeneration(PlantPot[] currentGeneration)
         {
             var nextPlantGeneration = new List<PlantPot>(currentGeneration.Length + 4);
 
@@ -101,7 +83,7 @@ namespace AdventCodeSolution.Day12
 
             var neighbourPlants = Enumerable
                 .Range(startIndex, totalPots)
-                .Select(i => plantPots.IsIndexInRange(index) ? plantPots[i].PotSymbol : PlantPot.EmptyPotSymbol)
+                .Select(i => plantPots.IsIndexInRange(i) ? plantPots[i].PotSymbol : PlantPot.EmptyPotSymbol)
                 .ToArray();
 
             return new string(neighbourPlants);

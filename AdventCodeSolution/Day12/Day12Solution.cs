@@ -15,9 +15,7 @@ namespace AdventCodeSolution.Day12
             var plantGenerationCalculator = new PlantsGenerationCalculator(initialState, rules);
 
             var plantsOfFutureGeneration = plantGenerationCalculator.GetPlantsOfGeneration(20);
-
-            new string(plantsOfFutureGeneration.Select(p => p.PotSymbol).ToArray()).WriteLine();
-
+            
             var sumOfPotNumbersWithPlants = plantsOfFutureGeneration.Where(p => p.ContainsPlant).Sum(p => p.Number);
 
             sumOfPotNumbersWithPlants.WriteLine("Day 12, Part 1: ");
@@ -32,11 +30,9 @@ namespace AdventCodeSolution.Day12
 
             var plantsOfFutureGeneration = plantGenerationCalculator.GetPlantsOfGeneration(50000000000);
 
-            //new string(plantsOfFutureGeneration.Select(p => p.PotSymbol).ToArray()).WriteLine();
-
             var sumOfPotNumbersWithPlants = plantsOfFutureGeneration.Where(p => p.ContainsPlant).Sum(p => p.Number);
 
-            sumOfPotNumbersWithPlants.WriteLine("Day 12, Part 1: ");
+            sumOfPotNumbersWithPlants.WriteLine("Day 12, Part 2: ");
         }
 
         private static string GetInitialState() => InputResources.Day12Input
