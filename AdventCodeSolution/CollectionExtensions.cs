@@ -56,12 +56,12 @@ namespace AdventCodeSolution
             return sequence.Any() ? aggregate(sequence) : defaultValue;
         }
 
-        public static Dictionary<TKey, TElement> ToDictionary<T, TKey, TElement>(this IEnumerable<T> sequence, 
+        public static Dictionary<TKey, TValue> ToDictionary<T, TKey, TValue>(this IEnumerable<T> sequence, 
             Func<T, TKey> getKey, 
-            Func<T, TElement> create, 
-            Func<TElement, TElement> update)
+            Func<T, TValue> create, 
+            Func<TValue, TValue> update)
         {
-            var result = new Dictionary<TKey, TElement>();
+            var result = new Dictionary<TKey, TValue>();
 
             foreach (var item in sequence)
             {
@@ -75,6 +75,19 @@ namespace AdventCodeSolution
             }
 
             return result;
+        }
+
+        public static SortedDictionary<TKey, TValue> ToSortedDictionary<T, TKey, TValue>(
+            this IEnumerable<T> sequence, Func<T, TKey> getKey, Func<T, TValue> getValue, IComparer<TKey> comparer)
+        {
+            var sortedDictionary = new SortedDictionary<TKey, TValue>(comparer);
+
+            foreach(var item in sequence)
+            {
+                sortedDictionary.Add(getKey(item), getValue(item));
+            }
+
+            return sortedDictionary;
         }
 
         public static List<TElement> RemoveWhere<TElement>(this List<TElement> sequence, Func<TElement, bool> shouldRemove)
@@ -152,5 +165,13 @@ namespace AdventCodeSolution
         }
 
         public static bool IsIndexInRange<T>(this IList<T> list, int i) => 0 <= i && i < list.Count;
+
+        public static IEnumerable<T> ReverseEnumerate<T>(this IList<T> list)
+        {
+            for(var i = list.Count - 1; i >= 0; i--)
+            {
+                yield return list[i];
+            }
+        }
     }
 }

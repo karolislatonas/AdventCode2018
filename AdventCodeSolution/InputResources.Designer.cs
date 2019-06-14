@@ -132,6 +132,18 @@ namespace AdventCodeSolution {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to                                          /----&gt;--------------------------------------------------\                                                    
+        ///                                         |/------------------------&gt;---------------------\       |                                                    
+        ///                                         ||                                              |       |              /-----------------------\/---------\  
+        ///                                         ||              [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Day13Input {
+            get {
+                return ResourceManager.GetString("Day13Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to +16
         ///-2
         ///-5
