@@ -1,27 +1,21 @@
-﻿using AdventCodeSolution.Day10;
-using AdventCodeSolution.Day3;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace AdventCodeSolution.Day13
 {
     public class CartsMovement
     {
-        private readonly SortedDictionary<XY, Cart> sortedCartsByMovement;
-
-        public CartsMovement(IEnumerable<Cart> carts, IEnumerable<Collision> collisions, int tick)
+        public CartsMovement(IEnumerable<Cart> carts, IEnumerable<Collision> collisions, int happenedOnTicktick)
         {
-            sortedCartsByMovement = carts.ToSortedDictionary(c => c.Location, c => c, FromLeftHighestToRightLowestComparer.Value);
+            Carts = carts.ToArray();
             Collisions = collisions.ToArray();
-            Tick = tick;
+            HappenedOnTick = happenedOnTicktick;
         }
 
-        public IReadOnlyCollection<Cart> Carts => sortedCartsByMovement.Values;
+        public IReadOnlyList<Cart> Carts { get; }
 
         public IReadOnlyList<Collision> Collisions { get; }
 
-        public int Tick { get; }
-
-        
+        public int HappenedOnTick { get; }
     }
 }

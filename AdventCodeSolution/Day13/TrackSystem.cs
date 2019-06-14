@@ -36,29 +36,26 @@ namespace AdventCodeSolution.Day13
             var tick = 1;
             do
             {
-                yield return MoveCarts(orderedCartsByLocation, tick);
+                yield return MoveCartsAndUpdateCurrentCarts(orderedCartsByLocation, tick);
 
                 tick++;
 
             } while (true);
         }
 
-        public CartsMovement MoveCarts(SortedDictionary<XY, Cart> sortedCartsByLocation, int tick)
+        public CartsMovement MoveCartsAndUpdateCurrentCarts(SortedDictionary<XY, Cart> sortedCartsByLocation, int tick)
         {
-            var movedCarts = sortedCartsByLocation
-                    .Values
-                    .Select(c => (beforeMove: c, afterMove: MoveCart(c)))
-                    .ToArray();
+            var movedCarts = sortedCartsByLocation.Values.Select(c => (beforeMove: c, afterMove: MoveCart(c))).ToArray();
 
             var collisions = new List<Collision>();
 
             foreach (var (cartBeforeMove, cartAfterMove) in movedCarts)
             {
-                if (!sortedCartsByLocation.Remove(cartBeforeMove.Location))
+                var alreadyRemoved = !sortedCartsByLocation.Remove(cartBeforeMove.Location);
+                if (alreadyRemoved)
                     continue;
 
                 var foundCollision = sortedCartsByLocation.TryGetValue(cartAfterMove.Location, out var collidingCart);
-
                 if (foundCollision)
                 {
                     sortedCartsByLocation.Remove(collidingCart.Location);
