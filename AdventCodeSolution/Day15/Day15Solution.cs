@@ -1,6 +1,5 @@
 ﻿using AdventCodeSolution.Day15.Players;
 using AdventCodeSolution.Day15.Players.Creation;
-using System;
 using System.Linq;
 
 namespace AdventCodeSolution.Day15
@@ -25,7 +24,6 @@ namespace AdventCodeSolution.Day15
         public static void SolvePartTwo()
         {
             var game = FindElfsFirstWinByIncreasingTheirPower();
-            //var game = RunGame(PlayerConfiguration.CreateConfig(14)).game;
 
             var hitPointsSum = game.Players.Sum(p => p.HitPoints);
             var result = game.TotalFullMovesMade * hitPointsSum;
