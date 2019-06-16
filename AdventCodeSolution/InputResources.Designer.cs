@@ -144,6 +144,39 @@ namespace AdventCodeSolution {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 990941.
+        /// </summary>
+        internal static string Day14Input {
+            get {
+                return ResourceManager.GetString("Day14Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ################################
+        ///##########..........############
+        ///########G..................#####
+        ///#######..G.GG...............####
+        ///#######....G.......#......######
+        ///########.G.G...............#E..#
+        ///#######G.................#.....#
+        ///########.......................#
+        ///########G.....G....#.....##....#
+        ///########.....#....G.........####
+        ///#########..........##....E.E#.##
+        ///##########G..G..........#####.##
+        ///##########....#####G....####E.##
+        ///######....G..#######.....#.....#
+        ///###....#....#########......#####
+        ///## [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Day15Input {
+            get {
+                return ResourceManager.GetString("Day15Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to +16
         ///-2
         ///-5

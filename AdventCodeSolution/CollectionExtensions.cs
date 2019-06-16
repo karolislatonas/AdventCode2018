@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace AdventCodeSolution
 {
@@ -31,14 +32,22 @@ namespace AdventCodeSolution
             return sequence.Aggregate((min, c) => getComparable(min).CompareTo(getComparable(c)) <= 0 ? min : c);
         }
 
+        public static T MinBy<T, TComparable>(this IEnumerable<T> sequence, Func<T, TComparable> getComparable, IComparer<TComparable> comparer)
+        {
+            return sequence.Aggregate((min, c) => comparer.Compare(getComparable(min), getComparable(c)) <= 0 ? min : c);
+        }
+
         public static T[] MultipleMinBy<T, TComparable>(this IEnumerable<T> sequence, Func<T, TComparable> getComparable)
             where TComparable : IComparable<TComparable>
         {
-            var minValues = new List<T>() { sequence.First() };
-
             return sequence
-                .Skip(1)
-                .Aggregate(minValues, (mins, c) => {
+                .Aggregate(new List<T>(), (mins, c) => {
+                    if(mins.Count == 0)
+                    {
+                        mins.Add(c);
+                        return mins;
+                    }
+
                     var currentMin = mins[0];
                     var comparisonResult = getComparable(currentMin).CompareTo(getComparable(c));
 
@@ -166,12 +175,25 @@ namespace AdventCodeSolution
 
         public static bool IsIndexInRange<T>(this IList<T> list, int i) => 0 <= i && i < list.Count;
 
-        public static IEnumerable<T> ReverseEnumerate<T>(this IList<T> list)
+        public static IEnumerable<T> ReverseEnumerate<T>(this IReadOnlyList<T> list)
         {
             for(var i = list.Count - 1; i >= 0; i--)
             {
                 yield return list[i];
             }
+        }
+
+        public static IEnumerable<T> TakeFrom<T>(this IReadOnlyList<T> list, int indexFrom, int count)
+        {
+            for (var i = 0; i < count; i++)
+            {
+                yield return list[indexFrom + i];
+            }
+        }
+
+        public static string JoinIntoString<T>(this IEnumerable<T> numbers)
+        {
+            return numbers.Aggregate(new StringBuilder(), (builder, i) => builder.Append(i)).ToString();
         }
     }
 }

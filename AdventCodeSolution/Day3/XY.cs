@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using static System.Math;
 
 namespace AdventCodeSolution.Day3
@@ -15,6 +16,10 @@ namespace AdventCodeSolution.Day3
         public int X { get; }
 
         public int Y { get; }
+
+        public XY XDirection => new XY(Sign(X), 0);
+
+        public XY YDirection => new XY(0, Sign(Y));
 
         public static XY Zero { get; } = new XY(0, 0);
 
