@@ -27,7 +27,7 @@ namespace AdventCodeSolution.Day15
 
         public IEnumerable<Player> GetEnemiesOf(Player player) => Players.Where(player.IsEnemy);
 
-        public Player[] GetPlayerOfRace<T>()
+        public Player[] GetPlayersOfRace<T>()
             where T : Player
         {
             return Players.OfType<T>().ToArray();

@@ -5,12 +5,12 @@ using System.Linq;
 
 namespace AdventCodeSolution.Day15
 {
-    public class MapParser
+    public class BattleMapParser
     {
         private const char WallSymbol = '#';
         private readonly PlayersFactory playersFactory;
 
-        public MapParser(PlayersFactory playersFactory)
+        public BattleMapParser(PlayersFactory playersFactory)
         {
             this.playersFactory = playersFactory;
         }

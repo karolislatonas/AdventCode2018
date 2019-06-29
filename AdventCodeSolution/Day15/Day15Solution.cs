@@ -8,60 +8,56 @@ namespace AdventCodeSolution.Day15
     {
         public static void SolvePartOne()
         {
-            var mapParser = new MapParser(new PlayersFactory());
+            var mapParser = new BattleMapParser(new PlayersFactory());
             var map = mapParser.Parse(GetInput());
 
-            var game = new Battle(map);
+            var battle = new Battle(map);
 
-            game.Simulate();
+            battle.Simulate();
 
-            var hitPointsSum = game.Players.Sum(p => p.HitPoints);
-            var result = game.TotalFullMovesMade * hitPointsSum;
+            var hitPointsSum = battle.Players.Sum(p => p.HitPoints);
+            var result = battle.TotalFullMovesMade * hitPointsSum;
 
             result.WriteLine("Day 15, Part 1: ");
         }
 
         public static void SolvePartTwo()
         {
-            var game = FindElfsFirstWinByIncreasingTheirPower();
+            var battle = FindElfsFirstWinByIncreasingTheirPower();
 
-            var hitPointsSum = game.Players.Sum(p => p.HitPoints);
-            var result = game.TotalFullMovesMade * hitPointsSum;
+            var hitPointsSum = battle.Players.Sum(p => p.HitPoints);
+            var result = battle.TotalFullMovesMade * hitPointsSum;
 
             result.WriteLine("Day 15, Part 2: ");
         }
 
         private static Battle FindElfsFirstWinByIncreasingTheirPower()
         {
-            var currentConfig = PlayerConfiguration.DefaultConfig;
-            (Battle game, ElfsPerformanceResult elfResult) lastGameResult;
+            // Todo think of more performant solution
+            var battleWithoutLosses = PlayerConfiguration.DefaultConfig
+                .StartEnumerate(c => PlayerConfiguration.CreateConfig(c.AttackPower + 1))
+                .Select(SimulateBattle)
+                .First(b => b.elfResult.TotalElfDeaths == 0);
 
-            do
-            {
-                currentConfig = PlayerConfiguration.CreateConfig(currentConfig.AttackPower + 1);
-                lastGameResult = RunGame(currentConfig);
-
-            } while (lastGameResult.elfResult.TotalElfDeaths > 0);
-
-            return lastGameResult.game;
+            return battleWithoutLosses.battle;
         }
 
-        private static (Battle game, ElfsPerformanceResult elfResult) RunGame(PlayerConfiguration elfConfig)
+        private static (Battle battle, ElfsPerformanceResult elfResult) SimulateBattle(PlayerConfiguration elfConfig)
         {
-            var mapParser = new MapParser(new PlayersFactory(elfConfig));
+            var mapParser = new BattleMapParser(new PlayersFactory(elfConfig));
             var map = mapParser.Parse(GetInput());
 
-            var elfs = map.GetPlayerOfRace<Elf>();
+            var elfs = map.GetPlayersOfRace<Elf>();
 
-            var game = new Battle(map);
+            var battle = new Battle(map);
 
-            game.Simulate();
+            battle.Simulate();
 
-            var elfResult = new ElfsPerformanceResult(
+            var elfsResult = new ElfsPerformanceResult(
                 elfs.Length,
                 elfs.Where(e => e.IsDead).Count());
 
-            return (game, elfResult);
+            return (battle, elfsResult);
         }
 
         private static string GetInput() => InputResources.Day15Input;
