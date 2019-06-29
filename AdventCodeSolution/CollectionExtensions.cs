@@ -80,7 +80,7 @@ namespace AdventCodeSolution
                     update(currentValue) :
                     create(item);
 
-                result[key] = currentValue;
+                result[key] = newValue;
             }
 
             return result;
@@ -137,6 +137,16 @@ namespace AdventCodeSolution
                 create(key);
 
             dictionary[key] = newValue;
+        }
+
+        public static void AddOrUpdateRange<TItem, TKey, TValue>(this IDictionary<TKey, TValue> dictionary, IEnumerable<TItem> items, Func<TItem, TKey> getKey, Func<TItem, TValue> create, Func<TItem, TValue, TValue> update)
+        {
+            foreach (var item in items)
+            {
+                var key = getKey(item);
+
+                dictionary.AddOrUpdate(key, k => create(item), (k, v) => update(item, v));
+            }
         }
 
         public static IEnumerable<LinkedListNode<TElement>> EnumerateNodes<TElement>(this LinkedList<TElement> linkedList)

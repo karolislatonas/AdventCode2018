@@ -177,6 +177,15 @@ namespace AdventCodeSolution {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Day16Input {
+            get {
+                return ResourceManager.GetString("Day16Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to +16
         ///-2
         ///-5

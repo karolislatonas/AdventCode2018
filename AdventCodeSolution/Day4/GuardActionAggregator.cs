@@ -106,8 +106,5 @@ namespace AdventCodeSolution.Day4
         {
             return periods.SelectMany(p => p.EnumerateMinutes()).ToDictionary(p => p, p => 1, p => p + 1);
         }
-            
     }
-
-
 }
