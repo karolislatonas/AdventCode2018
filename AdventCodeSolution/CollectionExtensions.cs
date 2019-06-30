@@ -205,5 +205,13 @@ namespace AdventCodeSolution
         {
             return numbers.Aggregate(new StringBuilder(), (builder, i) => builder.Append(i)).ToString();
         }
+
+        public static void AddRange<TItem, TKey, TValue>(this IDictionary<TKey, TValue> set, IEnumerable<TItem> items, Func<TItem, TKey> getKey, Func<TItem, TValue> getValue)
+        {
+            foreach (var item in items)
+            {
+                set.Add(getKey(item), getValue(item));
+            }   
+        }
     }
 }

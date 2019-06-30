@@ -177,11 +177,82 @@ namespace AdventCodeSolution {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Before: [0, 2, 2, 2]
+        ///11 3 3 3
+        ///After:  [0, 2, 2, 0]
+        ///
+        ///Before: [3, 2, 1, 1]
+        ///11 2 3 3
+        ///After:  [3, 2, 1, 0]
+        ///
+        ///Before: [1, 2, 2, 1]
+        ///5 3 2 2
+        ///After:  [1, 2, 1, 1]
+        ///
+        ///Before: [1, 0, 2, 2]
+        ///14 0 2 2
+        ///After:  [1, 0, 0, 2]
+        ///
+        ///Before: [3, 2, 3, 3]
+        ///10 1 3 3
+        ///After:  [3, 2, 3, 0]
+        ///
+        ///Before: [1, 1, 2, 1]
+        ///14 0 2 3
+        ///After:  [1, 1, 2, 0]
+        ///
+        ///Before: [2, 1, 2, 0]
+        ///6 2 2 0
+        ///After:  [1, 1, 2, 0]
+        ///
+        ///Before: [1, 1, 3, 1]
+        ///13 1 2 0
+        ///After:  [0, 1, 3, 1]
+        ///
+        ///Before: [1, 1, 1, 3]
+        ///10 2 3 1
+        ///After:  [1, 0, 1, 3]
+        ///
+        ///Before: [3 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Day16Input {
             get {
                 return ResourceManager.GetString("Day16Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to x=732, y=143..151
+        ///y=438, x=555..569
+        ///x=731, y=1620..1626
+        ///x=591, y=101..107
+        ///x=536, y=346..359
+        ///x=524, y=244..254
+        ///x=659, y=418..428
+        ///x=523, y=27..38
+        ///x=631, y=1144..1146
+        ///x=683, y=1286..1289
+        ///y=729, x=536..546
+        ///x=624, y=1197..1206
+        ///y=703, x=639..667
+        ///x=625, y=623..625
+        ///x=488, y=369..386
+        ///x=570, y=214..217
+        ///y=737, x=711..730
+        ///x=484, y=1354..1378
+        ///x=527, y=491..502
+        ///y=914, x=617..623
+        ///y=1104, x=680..685
+        ///x=597, y=1181..1186
+        ///x=625, y=1644..1653
+        ///x=509, y=1452..1455
+        ///y=113, x=603..611
+        ///x=734, y=1523..1537
+        ///x [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Day17Input {
+            get {
+                return ResourceManager.GetString("Day17Input", resourceCulture);
             }
         }
         
