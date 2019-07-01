@@ -1,138 +1,120 @@
 ﻿using AdventCodeSolution.Day3;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace AdventCodeSolution.Day17
 {
-    public class WaterStream
+    public class WaterStream : IEnumerable<Water>
     {
-        private readonly XY sourceLocation;
-        private readonly ClayMap clayMap;
+        private readonly Dictionary<XY, Water> waterLocations;
 
-        public WaterStream(XY sourceLocation, ClayMap clayMap)
+        public WaterStream(XY initialSourceLocation) : 
+            this(Water.CreateSourceAt(initialSourceLocation))
         {
-            this.sourceLocation = sourceLocation;
-            this.clayMap = clayMap;
+            
         }
 
-        public IDictionary<XY, Water> GetStream()
+        public WaterStream(Water initialSource)
         {
-            var streamSource = Water.CreateSourceAt(sourceLocation);
-            ICollection<Water> waterNodesToSpread = new List<Water>() { streamSource };
-            var existingWater = streamSource.RepeatOnce().ToDictionary(w => w.Location, w => w);
+            InitialSource = initialSource;
 
-            do
+            waterLocations = new Dictionary<XY, Water>()
             {
-                var newWater = new Dictionary<XY, Water>();
-
-                foreach (var water in waterNodesToSpread)
-                {
-                    var waterToAdd = GetFlowDirections(water, existingWater)
-                        .Select(d => water.FlowToDirection(d))
-                        .Where(w => !clayMap.IsBelowMap(w.Location))
-                        .ToArray();
-
-                    existingWater.AddRange(waterToAdd, w => w.Location, w => w);
-                    newWater.AddRange(waterToAdd, w => w.Location, w => w);
-
-                    if (waterToAdd.Length == 0 && IsWaterLevelStable(water, existingWater))
-                    {
-                        var waterInASameLevel = EnumerateWaterInSameLavel(water.Location, existingWater).ToArray();
-
-                        var sourcesToAdd = waterInASameLevel
-                            .Where(w => existingWater.ContainsKey(w.Location + XY.Up))
-                            .Select(w => existingWater[w.Location + XY.Up])
-                            .ToArray();
-
-                        newWater.AddOrUpdateRange(sourcesToAdd, w => w.Location, w => w, (@new, old) => @new);
-
-                        foreach (var w in waterInASameLevel)
-                            w.Stabilize();
-                    }
-                }
-
-                waterNodesToSpread = newWater.Values;
-
-            } while (waterNodesToSpread.Count > 0);
-
-            return existingWater;
+                [initialSource.Location] = initialSource
+            };
         }
 
-        private XY[] GetFlowDirections(Water water, IDictionary<XY, Water> existingWater)
+        public Water InitialSource { get; }
+
+        public int CountStableWater() => waterLocations.Values.Count(w => w.IsStable);
+
+        public Water[] SpreadStreamAtLocation(XY location, ClayMap clayMap)
         {
-            var locationBelow = water.Location + XY.Down;
+            var water = GetWater(location);
 
-            if (IsLocationEmpty(locationBelow, existingWater))
-                return XY.Down.RepeatOnce().ToArray();
+            var directionsToFlow = GetFlowDirections(water.Location, clayMap);
 
-            var isWaterBelow = existingWater.TryGetValue(locationBelow, out var waterBelow);
-
-            if (!isWaterBelow || waterBelow.IsStable)
+            var newAddedWater = new Water[directionsToFlow.Length];
+            for (var i = 0; i < directionsToFlow.Length; i++)
             {
-                return GetPossibleFlowDirections()
-                    .Where(d => IsLocationEmpty(water.Location + d, existingWater))
-                    .ToArray();
+                var newWater = water.FlowToDirection(directionsToFlow[i]);
+                newAddedWater[i] = newWater;
+                AddWater(newWater);
             }
 
-            return new XY[0];
+            return newAddedWater;
         }
 
-        private bool IsWaterLevelStable(Water water, IDictionary<XY, Water> existingWater)
+        public bool HasWaterAtLocation(XY location) => waterLocations.ContainsKey(location);
+
+        public Water GetWater(XY location) => waterLocations[location];
+
+        public bool TryGetWater(XY location, out Water water) => waterLocations.TryGetValue(location, out water);
+
+        private void AddWater(Water waterToAdd)
         {
-            var waterInASameLevel = EnumerateWaterInSameLavel(water.Location, existingWater).ToArray();
-
-            if (waterInASameLevel.All(w => w.IsStable))
-                return true;
-
-            var waterCanFlowFurther = waterInASameLevel.Any(w => HasEmptySpaceAround(w, existingWater));
-
-            if (waterCanFlowFurther)
-                return false;
-              
-            var waterInLowerLevel = waterInASameLevel.SelectMany(w => w.FurtherFlows).Where(w => w.Location.Y < water.Location.Y).ToArray();
-
-            if (waterInLowerLevel.Length == 0)
-                return true;
-
-            return waterInLowerLevel.All(w => IsWaterLevelStable(w, existingWater));
+            waterLocations.Add(waterToAdd.Location, waterToAdd);
         }
 
-        private IEnumerable<Water> EnumerateWaterInSameLavel(XY start, IDictionary<XY, Water> existingWaters)
+        public void StabilizeWaterInSameLevel(XY location)
         {
-            var waterInLeft = EnumerateWaterInDirection(start, XY.Left, existingWaters);
-            var waterInRight = EnumerateWaterInDirection(start + XY.Right, XY.Right, existingWaters);
+            var waterInASameLevel = EnumerateWaterInSameLavel(location);
+
+            foreach (var w in waterInASameLevel)
+                w.Stabilize();
+        }
+
+        public Water[] GetUpperLevelSourceWater(XY location)
+        {
+            return EnumerateWaterInSameLavel(location)
+                .Where(w => HasWaterAtLocation(w.Location + XY.Up))
+                .Select(w => GetWater(w.Location + XY.Up))
+                .ToArray();
+        }
+
+        public IEnumerator<Water> GetEnumerator() => waterLocations.Values.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public IEnumerable<Water> EnumerateWaterInSameLavel(XY start)
+        {
+            var waterInLeft = EnumerateWaterInDirection(start, XY.Left);
+            var waterInRight = EnumerateWaterInDirection(start + XY.Right, XY.Right);
 
             return waterInLeft.Concat(waterInRight);
         }
 
-        private IEnumerable<Water> EnumerateWaterInDirection(XY location, XY direction, IDictionary<XY, Water> existingWaters)
+        private IEnumerable<Water> EnumerateWaterInDirection(XY location, XY direction)
         {
             var currentLocation = location;
 
-            while(existingWaters.TryGetValue(currentLocation, out var water))
+            while (waterLocations.TryGetValue(currentLocation, out var water))
             {
                 yield return water;
                 currentLocation += direction;
             }
         }
 
-        private bool HasEmptySpaceAround(Water water, IDictionary<XY, Water> existingWaters)
+        private XY[] GetFlowDirections(XY location, ClayMap clayMap)
         {
-            return GetPossibleFlowDirections()
-                .Select(d => water.Location + d)
-                .Any(l => IsLocationEmpty(l, existingWaters));
-        }
+            bool CanFlowToLocation(XY loc) => !clayMap.IsClayAtLocation(loc) && !HasWaterAtLocation(loc);
 
-        private bool IsLocationEmpty(XY location, IDictionary<XY, Water> existingWaters)
-        {
-            return !clayMap.IsClayAtLocation(location) && !existingWaters.ContainsKey(location);
-        }
+            var locationBelow = location + XY.Down;
 
-        public static IEnumerable<XY> GetPossibleFlowDirections()
-        {
-            yield return XY.Down;
-            yield return XY.Left;
-            yield return XY.Right;
+            if (CanFlowToLocation(locationBelow))
+                return XY.Down.RepeatOnce().ToArray();
+
+            var isWaterBelow = TryGetWater(locationBelow, out var waterBelow);
+
+            if (!isWaterBelow || waterBelow.IsStable)
+            {
+                return Water.GetPossibleFlowDirections()
+                    .Where(d => CanFlowToLocation(location + d))
+                    .ToArray();
+            }
+
+            return new XY[0];
         }
     }
 }

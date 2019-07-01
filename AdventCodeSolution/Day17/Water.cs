@@ -52,6 +52,13 @@ namespace AdventCodeSolution.Day17
             return currentSource;
         }
 
+        public static IEnumerable<XY> GetPossibleFlowDirections()
+        {
+            yield return XY.Down;
+            yield return XY.Left;
+            yield return XY.Right;
+        }
+
         public static Water CreateSourceAt(XY location) => new Water(null, location);
     }
 }

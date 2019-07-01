@@ -70,8 +70,8 @@ namespace AdventCodeSolution
             //Day16Solution.SolvePartOne();
             //Day16Solution.SolvePartTwo();
 
-            //Day17Solution.SolvePartOne();
-            Day17Solution.SolvePartTwo();
+            Day17Solution.SolvePartOne();
+            //Day17Solution.SolvePartTwo();
         }
     }
 }

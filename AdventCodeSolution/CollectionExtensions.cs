@@ -149,6 +149,12 @@ namespace AdventCodeSolution
             }
         }
 
+        public static void AddRange<TValue>(this HashSet<TValue> set, IEnumerable<TValue> values)
+        {
+            foreach (var value in values)
+                set.Add(value);
+        }
+
         public static IEnumerable<LinkedListNode<TElement>> EnumerateNodes<TElement>(this LinkedList<TElement> linkedList)
         {
             var current = linkedList.First;

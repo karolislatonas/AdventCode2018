@@ -15,11 +15,11 @@ namespace AdventCodeSolution.Day17
 
             var sourceLocation = new XY(500, 0);
             var map = new ClayMap(clayLocations);
-            var stream = new WaterStream(sourceLocation, map);
+            var stream = new WaterStreamBuilder(sourceLocation, map);
 
             var water = stream.GetStream();
 
-            var result = water.Values.Select(w => w.Location).Count(map.IsInClayArea);
+            var result = water.Select(w => w.Location).Count(map.IsInClayArea);
 
             //File.WriteAllText(
             //    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "map.txt"), 
@@ -34,11 +34,11 @@ namespace AdventCodeSolution.Day17
 
             var sourceLocation = new XY(500, 0);
             var map = new ClayMap(clayLocations);
-            var stream = new WaterStream(sourceLocation, map);
+            var streamBuilder = new WaterStreamBuilder(sourceLocation, map);
 
-            var water = stream.GetStream();
+            var stream = streamBuilder.GetStream();
 
-            var result = water.Values.Count(w => w.IsStable);
+            var result = stream.CountStableWater();
 
             result.WriteLine("Day 17, Part 2: ");
         }
