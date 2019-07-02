@@ -26,6 +26,7 @@ namespace AdventCodeSolution.Day17
 
                 foreach (var waterLocation in waterNodesToSpread)
                 {
+                    // Todo Refactor
                     var spreadedWater = stream.SpreadStreamAtLocation(waterLocation, clayMap);
                     var waterLocationInClayMap = spreadedWater.Select(w => w.Location).Where(l => !clayMap.IsBelowMap(l));
 

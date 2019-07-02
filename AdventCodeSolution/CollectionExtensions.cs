@@ -23,18 +23,23 @@ namespace AdventCodeSolution
         public static T MaxBy<T, TComparable>(this IEnumerable<T> sequence, Func<T, TComparable> getComparable)
             where TComparable : IComparable<TComparable>
         {
-            return sequence.Aggregate((max, c) => getComparable(max).CompareTo(getComparable(c)) <= 0 ? c : max);
+            return sequence.Aggregate((max, c) => getComparable(max).CompareTo(getComparable(c)) < 0 ? c : max);
+        }
+
+        public static T MaxBy<T, TComparable>(this IEnumerable<T> sequence, Func<T, TComparable> getComparable, IComparer<TComparable> comparer)
+        {
+            return sequence.Aggregate((max, c) => comparer.Compare(getComparable(max), getComparable(c)) < 0 ? c : max);
         }
 
         public static T MinBy<T, TComparable>(this IEnumerable<T> sequence, Func<T, TComparable> getComparable)
             where TComparable : IComparable<TComparable>
         {
-            return sequence.Aggregate((min, c) => getComparable(min).CompareTo(getComparable(c)) <= 0 ? min : c);
+            return sequence.Aggregate((min, c) => getComparable(min).CompareTo(getComparable(c)) > 0 ? c : min);
         }
 
         public static T MinBy<T, TComparable>(this IEnumerable<T> sequence, Func<T, TComparable> getComparable, IComparer<TComparable> comparer)
         {
-            return sequence.Aggregate((min, c) => comparer.Compare(getComparable(min), getComparable(c)) <= 0 ? min : c);
+            return sequence.Aggregate((min, c) => comparer.Compare(getComparable(min), getComparable(c)) > 0 ? c : min);
         }
 
         public static T[] MultipleMinBy<T, TComparable>(this IEnumerable<T> sequence, Func<T, TComparable> getComparable)
