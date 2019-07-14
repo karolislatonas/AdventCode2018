@@ -38,14 +38,14 @@ namespace AdventCodeSolution.Day19
 
         private static RegisterValues Run(RegisterValues initialRegisterValues, OpcodeInstruction[] instructions, int boundedRegister)
         {
-            var currentPointer = 0L;
-            var previousPointer = -1L;
+            var currentPointer = 0;
+            var previousPointer = -1;
             var registerValues = initialRegisterValues;
 
             var initialFirst = registerValues[0];
 
-            var registerInPreviousPointers = new Dictionary<long, RegisterValues>();
-            var loopingDiffs = new Dictionary<long, long[]>();
+            var registerInPreviousPointers = new Dictionary<int, RegisterValues>();
+            var loopingDiffs = new Dictionary<int, int[]>();
             var hasLoopingDiffsChanged = false;
 
             //var writer = new StreamWriter(File.OpenWrite(@"C:\Users\KarolisL\Desktop\testQuick.txt"));
@@ -79,23 +79,7 @@ namespace AdventCodeSolution.Day19
 
                 if (!hasLoopingDiffsChanged)
                 {
-                    var registerThatWillChange = loopingDiffs.Keys
-                        .Select(pointer => instructions[pointer])
-                        .Where(i => i.Opcode is ComparisonOpcode)
-                        .Select(i => (pointer: i.Pointer, changingValue: ((ComparisonOpcode)i.Opcode).GetRequiredValueToChange(registerValues, i.Instruction)))
-                        .ToArray();
-
-                    var pointerThatWillBeReachedFirst = registerThatWillChange
-                        .Select(x =>
-                        {
-                            var speed = loopingDiffs[x.pointer][x.changingValue.register];
-                            return (x.pointer, loopsRequires: ((x.changingValue.value - registerValues[x.changingValue.register]) / speed) - speed);
-                        })
-                        .MinBy(x => x.loopsRequires);
-
-                    var start = Math.Max(pointerThatWillBeReachedFirst.loopsRequires, 1);
-
-                    var jumpSize = BinarySearch.ForawrdSearchLong(start, v => v * 2, jumper =>
+                    var jumpSize = BinarySearch.ForawrdSearch(1, v => v * 2, jumper =>
                     {
                         var jumpedValues = loopingDiffs.ToDictionary(kvp => kvp.Key,
                                 kvp => registerInPreviousPointers[kvp.Key].AddValues(

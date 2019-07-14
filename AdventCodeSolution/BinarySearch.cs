@@ -40,42 +40,6 @@ namespace AdventCodeSolution
             return current;
         }
 
-        public static long ForawrdSearchLong(long start, Func<long, long> getNext, Func<long, long> getDirection)
-        {
-            var left = start;
-            var right = start;
-            var current = start;
-
-            while (getDirection(current) > 0)
-            {
-                left = right;
-
-                current = getNext(current);
-
-                right = current;
-            }
-
-            long previousCurrent;
-            do
-            {
-                previousCurrent = current;
-                current = (left + right) / 2;
-                var direction = getDirection(current);
-
-                if (direction < 0)
-                    right = current;
-                else if (direction > 0)
-                    left = current;
-                else
-                {
-                    left = current;
-                    right = current;
-                }
-            } while (previousCurrent != current);
-
-            return current;
-        }
-
         private class LeftRight
         {
             public LeftRight(int left, int right)

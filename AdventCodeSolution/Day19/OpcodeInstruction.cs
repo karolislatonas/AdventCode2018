@@ -22,7 +22,7 @@ namespace AdventCodeSolution.Day19
             return Opcode.UpdateRegisters(registerValues, Instruction);
         }
 
-        public void UpdateRegisters(long[] registerValues)
+        public void UpdateRegisters(int[] registerValues)
         {
             Opcode.UpdateRegisters(registerValues, Instruction);
         }
