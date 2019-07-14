@@ -29,7 +29,7 @@ namespace AdventCodeSolution.Day19
 
             var registerValues = new RegisterValues(Enumerable.Repeat(0, 6));
             
-            registerValues = Run(registerValues.UpdateValue(0, 0), instructions, boundedRegister);
+            registerValues = Run(registerValues.UpdateValue(0, 1), instructions, boundedRegister);
 
             var result = registerValues[0];
 
@@ -39,31 +39,24 @@ namespace AdventCodeSolution.Day19
         private static RegisterValues Run(RegisterValues initialRegisterValues, OpcodeInstruction[] instructions, int boundedRegister)
         {
             var currentPointer = 0;
-            var previousPointer = -1;
+            var previousPointer = currentPointer - 1;
             var registerValues = initialRegisterValues;
-
-            var initialFirst = registerValues[0];
-
+            
             var registerInPreviousPointers = new Dictionary<int, RegisterValues>();
-            var loopingDiffs = new Dictionary<int, int[]>();
+            var loopingDiffs = new Dictionary<int, RegisterValues>();
             var hasLoopingDiffsChanged = false;
 
-            //var writer = new StreamWriter(File.OpenWrite(@"C:\Users\KarolisL\Desktop\testQuick.txt"));
+            //var writer = new StreamWriter(File.OpenWrite(@"C:\Users\KarolisL\Desktop\test1.txt"));
             var ind = 0;
             do
             {
-                if(ind == 333)
-                {
-
-                }
-
                 if (registerInPreviousPointers.TryGetValue(currentPointer, out var previousRegisters))
                 {
-                    var currentDiff = registerValues.Values.Select((v, i) => v - previousRegisters[i]).ToArray();
+                    var currentDiff = registerValues - previousRegisters;
 
                     if (loopingDiffs.TryGetValue(currentPointer, out var previousDiff))
                     {
-                        hasLoopingDiffsChanged = hasLoopingDiffsChanged || !currentDiff.SequenceEqual(previousDiff);
+                        hasLoopingDiffsChanged = hasLoopingDiffsChanged || !currentDiff.Equals(previousDiff);
                     }
                     else
                     {
@@ -79,40 +72,32 @@ namespace AdventCodeSolution.Day19
 
                 if (!hasLoopingDiffsChanged)
                 {
-                    var jumpSize = BinarySearch.ForawrdSearch(1, v => v * 2, jumper =>
-                    {
-                        var jumpedValues = loopingDiffs.ToDictionary(kvp => kvp.Key,
-                                kvp => registerInPreviousPointers[kvp.Key].AddValues(
-                                    new RegisterValues(kvp.Value).MultiplyValuesBy(jumper)));
+                    var possibleJumps = loopingDiffs
+                        .SelectMany(kvp => FindJumps(registerInPreviousPointers[kvp.Key], kvp.Value))
+                        .SelectMany(j => new[] { j - 1, j })
+                        .Distinct()
+                        .OrderBy(v => v)
+                        .ToArray();
 
-                        var pointer = previousPointer;
-                        var registers = jumpedValues[pointer];
-                        var pointAndRegisters = (pointer, registers);
-                        var newRegisters = pointAndRegisters.StartEnumerate(p =>
+                    var jump = possibleJumps
+                        .First(j =>
                         {
-                            if (p.pointer >= instructions.Length)
-                                return (p.pointer, null);
+                            var initialPointer = previousPointer;
 
-                            var newR = p.registers.UpdateValue(boundedRegister, p.pointer);
-                            newR = instructions[p.pointer].UpdateRegisters(newR);
-                            var ptr = newR[boundedRegister] + 1;
+                            var jumpedValues = loopingDiffs.ToDictionary(kvp => kvp.Key, kvp => registerInPreviousPointers[kvp.Key] + kvp.Value * j);
+                            var updatedValues = EnumerateOpcodeUpdates(jumpedValues[initialPointer], instructions, boundedRegister, initialPointer)
+                                .Take(loopingDiffs.Count)
+                                .ToDictionary(r => r.pointer, r => r.values, (t, old) => t.values);
 
-                            return (ptr, newR);
-                        }).Skip(1)
-                            .TakeWhile((pr, i) => pr.registers != null && i < jumpedValues.Count)
-                            .ToDictionary(pr => pr.pointer, pr => pr.registers);
+                            var diffsAreDifferent = updatedValues.Any(kvp => 
+                                !jumpedValues.TryGetValue(kvp.Key, out var otherValues) ||
+                                !loopingDiffs.TryGetValue(kvp.Key, out var loopingValue) ||
+                                (kvp.Value - otherValues) != loopingValue);
 
-                        var diffsAreSame = newRegisters.All(kvp =>
-                            jumpedValues.TryGetValue(kvp.Key, out var otherValues) &&
-                                kvp.Value.Values.Select((v, i) => v - otherValues[i])
-                                   .Select((d, i) => d - loopingDiffs[kvp.Key][i]).All(v => v == 0));
+                            return diffsAreDifferent;
+                        });
 
-                        return diffsAreSame ? 1 : -1;
-                    });
-
-                    var jump = new RegisterValues(loopingDiffs[currentPointer]).MultiplyValuesBy(jumpSize);
-                    var prev = registerValues;
-                    registerValues = registerValues.AddValues(jump);
+                    registerValues += loopingDiffs[currentPointer] * (jump - 1);
 
                     loopingDiffs.Clear();
                     registerInPreviousPointers.Clear();
@@ -127,6 +112,7 @@ namespace AdventCodeSolution.Day19
                 registerValues = instructions[currentPointer].UpdateRegisters(registerValues);
 
                 previousPointer = currentPointer;
+
                 currentPointer = registerValues[boundedRegister] + 1;
 
                 //writer.WriteLine($"{currentPointer} -> {registerValues}");
@@ -143,22 +129,43 @@ namespace AdventCodeSolution.Day19
 
         private static string GetInput() => InputResources.Day19Input;
 
-        //private static RegisterValues Run(RegisterValues initialRegisterValues, OpcodeInstruction[] instructions, int boundedRegister)
-        //{
-        //    var currentPointer = 0L;
-        //    var registerValues = initialRegisterValues;
+        private static int[] FindJumps(RegisterValues values, RegisterValues speed)
+        {
+            var channgingRegisters = speed.Values
+                .Select((v, i) => (v, i))
+                .Where(r => r.v != 0)
+                .Select(r => r.i);
 
-        //    do
-        //    {
-        //        registerValues = registerValues.UpdateValue(boundedRegister, currentPointer);
+            var possibleJumps = channgingRegisters
+                .SelectMany(registerIndex => Enumerable.Range(0, values.Values.Length)
+                    .Select(i => (values[i] - values[registerIndex]) / speed[registerIndex])
+                    .Where(j => j > 0))
+                .Distinct()
+                .ToArray();
 
-        //        registerValues = instructions[currentPointer].UpdateRegisters(registerValues);
+            return possibleJumps;
+        }
 
-        //        currentPointer = registerValues[boundedRegister] + 1;
+        private static IEnumerable<(int pointer, RegisterValues values)> EnumerateOpcodeUpdates(
+            RegisterValues initialRegisterValues, 
+            OpcodeInstruction[] instructions, 
+            int boundedRegister, 
+            int initialPointer)
+        {
+            var currentPointer = initialPointer;
+            var registerValues = initialRegisterValues;
 
-        //    } while (currentPointer < instructions.Length);
+            do
+            {
+                registerValues = registerValues.UpdateValue(boundedRegister, currentPointer);
 
-        //    return registerValues;
-        //}
+                registerValues = instructions[currentPointer].UpdateRegisters(registerValues);
+
+                currentPointer = registerValues[boundedRegister] + 1;
+
+                yield return (currentPointer, registerValues);
+
+            } while (currentPointer < instructions.Length);
+        }
     }
 }

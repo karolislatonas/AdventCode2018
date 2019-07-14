@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Text;
 
 namespace AdventCodeSolution.Day16
 {
@@ -33,21 +35,30 @@ namespace AdventCodeSolution.Day16
                 Values.SetItem(registerIndex, newValue));
         }
 
-        public RegisterValues MultiplyValuesBy(int multiplier)
+        public static RegisterValues operator +(RegisterValues left, RegisterValues right) => left.CombineValues(right, (l, r) => l + r);
+
+        public static RegisterValues operator -(RegisterValues left, RegisterValues right) => left.CombineValues(right, (l, r) => l - r);
+
+        public static RegisterValues operator *(RegisterValues left, int multiplier) => new RegisterValues(left.Values.Select(v => v * multiplier));
+
+        public override string ToString()
         {
-            return new RegisterValues(Values.Select(v => v * multiplier));
+            return Values
+                .Select(v => v.ToString())
+                .Aggregate((t, v) => $"{t} {v}");
         }
-
-        public RegisterValues AddValues(RegisterValues otherRegisterValues)
-        {
-            var addedValues = Values.Select((v, i) => otherRegisterValues[i] + v);
-
-            return new RegisterValues(addedValues);
-        }
-
 
         protected override bool EqualsCore(RegisterValues other) => Values.SequenceEqual(other.Values);
 
         protected override int GetHashCodeCore() => Values.Aggregate(17, (t, c) => t ^ c);
+
+        private RegisterValues CombineValues(RegisterValues other, Func<int, int, int> combineRegisterValues)
+        {
+            if (Values.Length != other.Values.Length)
+                throw new InvalidOperationException();
+
+            var combinedValues = Values.Select((v, i) => combineRegisterValues(v, other[i]));
+            return new RegisterValues(combinedValues);
+        }
     }
 }
