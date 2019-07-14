@@ -9,6 +9,7 @@ using AdventCodeSolution.Day16;
 using AdventCodeSolution.Day17;
 using AdventCodeSolution.Day18;
 using AdventCodeSolution.Day2;
+using AdventCodeSolution.Day20;
 using AdventCodeSolution.Day3;
 using AdventCodeSolution.Day4;
 using AdventCodeSolution.Day5;
@@ -75,7 +76,14 @@ namespace AdventCodeSolution
             //Day17Solution.SolvePartTwo();
 
             //Day18Solution.SolvePartOne();
-            Day18Solution.SolvePartTwo();
+            //Day18Solution.SolvePartTwo();
+
+            // TODO will implement later
+            //Day19Solution.SolvePartOne();
+            //Day19Solution.SolvePartTwo();
+
+            //Day20Solution.SolvePartOne();
+            //Day20Solution.SolvePartTwo();
         }
     }
 }

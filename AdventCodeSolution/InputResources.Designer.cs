@@ -397,6 +397,15 @@ namespace AdventCodeSolution {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ^WSWSWSWNWSSWWWWWNENESENNWWNENENESENEEES(SWNWSS(WW(SS|N(W|E))|E)|EEENNEENESSWSSSSEENNESSENESSWWWWSWWWSWWSSSEEENEENWW(WWSEWNEE|)NEEESSENEENN(WSWNWESENE|)ESENENEEENEESWSESWWNWWSESWW(N|WSEESSSWWWNN(ESENSWNW|)N(WSW(SESSWSSSESSSSWWWSWWNNNENESS(WSNE|)EENWN(E|NWNENWNEN(NWWS(WN(NEEEWWWS|)WWWSEESSESWWNNWWSWNWSWNWNWWSSWWWSESENESENN(ESSSSSSENNNESENNN(WWSEWNEE|)ESE(ESWSW(N|SESSWWW(NE(NWES|)E|SESWWWWWSESWWWWWNWWSWWWSSSWWNWSWWNENWNENENNESSE(EEENWNNWSSWNNNNWWSWNWNENNWNNENEESENESEENNW(WWWWNWSWSWSSSWNNWSSWWNENWWNNNNWNWSWSSS [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Day20Input {
+            get {
+                return ResourceManager.GetString("Day20Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to cvfueihajytpmrdkgsxfqplbxn
         ///cbzueihajytnmrdkgtxfqplbwn
         ///cvzucihajytomrdkgstfqplqwn
