@@ -27,7 +27,7 @@ namespace AdventCodeSolution.Day19
             var hasLoopingDiffsChanged = false;
 
             //var writer = new StreamWriter(File.OpenWrite(@"C:\Users\KarolisL\Desktop\test1.txt"));
-            var jumpIndex = 0;
+            var index = 0;
             do
             {
                 if (registerInPreviousPointers.TryGetValue(currentPointer, out var previousRegisters))
@@ -54,18 +54,11 @@ namespace AdventCodeSolution.Day19
                 {
                     //writer.WriteLine($"Jump: {jumpIndex}");
 
-                    if(jumpIndex == 204)
-                    {
-
-                    }
-
                     var loopJump = CalculateLoopJump(previousPointer, currentPointer, loopingDiffs, registerInPreviousPointers);
                     registerValues += loopJump;
 
                     //writer.WriteLine($"{currentPointer} > {registerValues} (After Jump)");
                     //writer.WriteLine($"Jump finished: {jumpIndex}");
-
-                    jumpIndex++;
 
                     loopingDiffs.Clear();
                     registerInPreviousPointers.Clear();
@@ -78,6 +71,13 @@ namespace AdventCodeSolution.Day19
                 previousPointer = currentPointer;
 
                 (registerValues, currentPointer) = ApplyOpcode(registerValues, currentPointer);
+
+                index++;
+
+                if(index % 100000 == 0)
+                {
+                    $"{currentPointer} > {registerValues}".WriteLine();
+                }
 
                 //writer.WriteLine($"{currentPointer} > {registerValues}");
 
@@ -113,24 +113,10 @@ namespace AdventCodeSolution.Day19
                         .Take(loopingDiffs.Count)
                         .ToDictionary(r => r.pointer, r => r.values);
 
-                        //!jumpedValues.TryGetValue(kvp.Key, out var otherValues) ||
-                        //!loopingDiffs.TryGetValue(kvp.Key, out var loopingValue) ||
-                        //(kvp.Value - otherValues) != loopingValue);
-
-                    var diffsAreDifferent = updatedValues.Any(kvp =>
-                    {
-                        var missingJumpedValue = !jumpedValues.TryGetValue(kvp.Key, out var otherValues);
-                        var missingLoopingDiff = !loopingDiffs.TryGetValue(kvp.Key, out var loopingDiff);
-
-                        if (missingJumpedValue || missingJumpedValue)
-                            return false;
-
-                        var difference = kvp.Value - otherValues;
-
-                        var diffsChanges = difference != loopingDiff;
-
-                        return diffsChanges;
-                    });
+                    var diffsAreDifferent = updatedValues.Any(kvp => 
+                        !jumpedValues.TryGetValue(kvp.Key, out var otherValues) ||
+                        !loopingDiffs.TryGetValue(kvp.Key, out var loopingValue) ||
+                        (kvp.Value - otherValues) != loopingValue);
 
                     return diffsAreDifferent;
                 });
