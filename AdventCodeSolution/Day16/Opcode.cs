@@ -5,9 +5,9 @@ namespace AdventCodeSolution.Day16
 {
     public class Opcode
     {
-        private readonly Func<RegisterValues, RegisterInstruction, int> calculateNewRegisterValue;
+        private readonly Func<IList<int>, RegisterInstruction, int> calculateNewRegisterValue;
 
-        private Opcode(string name, Func<RegisterValues, RegisterInstruction, int> calculateNewRegisterValue)
+        protected Opcode(string name, Func<IList<int>, RegisterInstruction, int> calculateNewRegisterValue)
         {
             Name = name;
             this.calculateNewRegisterValue = calculateNewRegisterValue;
@@ -17,7 +17,7 @@ namespace AdventCodeSolution.Day16
 
         public RegisterValues UpdateRegisters(RegisterValues registerValues, RegisterInstruction updateCommand)
         {
-            var newRegisterValue = calculateNewRegisterValue(registerValues, updateCommand);
+            var newRegisterValue = calculateNewRegisterValue(registerValues.Values, updateCommand);
 
             return registerValues.UpdateValue(updateCommand.OutputToRegister, newRegisterValue);
         }

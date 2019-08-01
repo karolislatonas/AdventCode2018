@@ -75,6 +75,14 @@ namespace AdventCodeSolution
             Func<T, TValue> create, 
             Func<TValue, TValue> update)
         {
+            return sequence.ToDictionary(getKey, create, (i, old) => update(old));
+        }
+
+        public static Dictionary<TKey, TValue> ToDictionary<T, TKey, TValue>(this IEnumerable<T> sequence,
+            Func<T, TKey> getKey,
+            Func<T, TValue> create,
+            Func<T, TValue, TValue> update)
+        {
             var result = new Dictionary<TKey, TValue>();
 
             foreach (var item in sequence)
@@ -82,7 +90,7 @@ namespace AdventCodeSolution
                 var key = getKey(item);
 
                 var newValue = result.TryGetValue(key, out var currentValue) ?
-                    update(currentValue) :
+                    update(item, currentValue) :
                     create(item);
 
                 result[key] = newValue;

@@ -8,6 +8,7 @@ using AdventCodeSolution.Day15;
 using AdventCodeSolution.Day16;
 using AdventCodeSolution.Day17;
 using AdventCodeSolution.Day18;
+using AdventCodeSolution.Day19;
 using AdventCodeSolution.Day2;
 using AdventCodeSolution.Day20;
 using AdventCodeSolution.Day3;
@@ -78,7 +79,6 @@ namespace AdventCodeSolution
             //Day18Solution.SolvePartOne();
             //Day18Solution.SolvePartTwo();
 
-            // TODO will implement later
             //Day19Solution.SolvePartOne();
             //Day19Solution.SolvePartTwo();
 
