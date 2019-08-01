@@ -23,7 +23,7 @@ namespace AdventCodeSolution
             do
             {
                 previousCurrent = current;
-                current = (left + right) / 2;
+                current = (left + right + 1) / 2; // +1 to take higher
                 var direction = getDirection(current);
 
                 if (direction < 0)

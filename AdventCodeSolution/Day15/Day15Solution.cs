@@ -1,5 +1,7 @@
 ﻿using AdventCodeSolution.Day15.Players;
 using AdventCodeSolution.Day15.Players.Creation;
+using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace AdventCodeSolution.Day15
@@ -33,13 +35,19 @@ namespace AdventCodeSolution.Day15
 
         private static Battle FindElfsFirstWinByIncreasingTheirPower()
         {
-            // Todo think of more performant solution
-            var battleWithoutLosses = PlayerConfiguration.DefaultConfig
-                .StartEnumerate(c => PlayerConfiguration.CreateConfig(c.AttackPower + 1))
-                .Select(SimulateBattle)
-                .First(b => b.elfResult.TotalElfDeaths == 0);
+            var stopwatch = Stopwatch.StartNew();
 
-            return battleWithoutLosses.battle;
+            var defaultConfig = PlayerConfiguration.DefaultConfig;
+
+            var attackPowerWithOutLosses = BinarySearch.ForawrdSearch(defaultConfig.AttackPower,
+                attackPower => attackPower * attackPower,
+                attackPower =>
+                {
+                    var battleResult = SimulateBattle(PlayerConfiguration.CreateConfig(attackPower));
+                    return battleResult.elfResult.TotalElfDeaths == 0 ? -1 : 1;
+                });
+
+            return SimulateBattle(PlayerConfiguration.CreateConfig(attackPowerWithOutLosses)).battle;
         }
 
         private static (Battle battle, ElfsPerformanceResult elfResult) SimulateBattle(PlayerConfiguration elfConfig)
