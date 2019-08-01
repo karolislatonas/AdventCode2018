@@ -1,7 +1,4 @@
 ﻿using AdventCodeSolution.Day16;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace AdventCodeSolution.Day19
 {
@@ -18,144 +15,20 @@ namespace AdventCodeSolution.Day19
 
         public RegisterValues Run(RegisterValues initialRegisterValues)
         {
-            var currentPointer = 0;
-            var previousPointer = currentPointer - 1;
+            var pointer = 0;
             var registerValues = initialRegisterValues;
 
-            var registerInPreviousPointers = new Dictionary<int, RegisterValues>();
-            var loopingDiffs = new Dictionary<int, RegisterValues>();
-            var hasLoopingDiffsChanged = false;
-
-            //var writer = new StreamWriter(File.OpenWrite(@"C:\Users\KarolisL\Desktop\test1.txt"));
-            var index = 0;
             do
             {
-                if (registerInPreviousPointers.TryGetValue(currentPointer, out var previousRegisters))
-                {
-                    var currentDiff = registerValues - previousRegisters;
+                registerValues = registerValues.UpdateValue(boundedRegister, pointer);
 
-                    if (loopingDiffs.TryGetValue(currentPointer, out var previousDiff))
-                    {
-                        hasLoopingDiffsChanged = hasLoopingDiffsChanged || !currentDiff.Equals(previousDiff);
-                    }
-                    else
-                    {
-                        hasLoopingDiffsChanged = true;
-                    }
+                registerValues = instructions[pointer].UpdateRegisters(registerValues);
 
-                    loopingDiffs[currentPointer] = currentDiff;
-                }
-                else
-                {
-                    hasLoopingDiffsChanged = true;
-                }
+                pointer = registerValues[boundedRegister] + 1;
 
-                if (!hasLoopingDiffsChanged)
-                {
-                    //writer.WriteLine($"Jump: {jumpIndex}");
-
-                    var loopJump = CalculateLoopJump(previousPointer, currentPointer, loopingDiffs, registerInPreviousPointers);
-                    registerValues += loopJump;
-
-                    //writer.WriteLine($"{currentPointer} > {registerValues} (After Jump)");
-                    //writer.WriteLine($"Jump finished: {jumpIndex}");
-
-                    loopingDiffs.Clear();
-                    registerInPreviousPointers.Clear();
-                }
-
-                registerInPreviousPointers[currentPointer] = registerValues;
-
-                hasLoopingDiffsChanged = false; // Reset
-
-                previousPointer = currentPointer;
-
-                (registerValues, currentPointer) = ApplyOpcode(registerValues, currentPointer);
-
-                index++;
-
-                if(index % 100000 == 0)
-                {
-                    $"{currentPointer} > {registerValues}".WriteLine();
-                }
-
-                //writer.WriteLine($"{currentPointer} > {registerValues}");
-
-            } while (currentPointer < instructions.Length);
-
-            //writer.Flush();
-            //writer.Dispose();
+            } while (pointer < instructions.Length);
 
             return registerValues;
-        }
-
-        private RegisterValues CalculateLoopJump(
-            int previousPointer,
-            int currentPointer,
-            Dictionary<int, RegisterValues> loopingDiffs,
-            Dictionary<int, RegisterValues> registerInPreviousPointers)
-        {
-            var possibleJumps = loopingDiffs
-                        .SelectMany(kvp => FindJumpTargets(registerInPreviousPointers[kvp.Key], kvp.Value))
-                        .SelectMany(j => new[] { j - 1, j, j + 1 })
-                        .Where(j => j >= 0)
-                        .Distinct()
-                        .OrderBy(v => v)
-                        .ToArray();
-
-            var jump = possibleJumps
-                .First(j =>
-                {
-                    var initialPointer = previousPointer;
-
-                    var jumpedValues = loopingDiffs.ToDictionary(kvp => kvp.Key, kvp => registerInPreviousPointers[kvp.Key] + kvp.Value * j);
-                    var updatedValues = EnumerateOpcodeUpdates(jumpedValues[initialPointer], initialPointer)
-                        .Take(loopingDiffs.Count)
-                        .ToDictionary(r => r.pointer, r => r.values);
-
-                    var diffsAreDifferent = updatedValues.Any(kvp => 
-                        !jumpedValues.TryGetValue(kvp.Key, out var otherValues) ||
-                        !loopingDiffs.TryGetValue(kvp.Key, out var loopingValue) ||
-                        (kvp.Value - otherValues) != loopingValue);
-
-                    return diffsAreDifferent;
-                });
-
-            return loopingDiffs[currentPointer] * (jump - 1);
-        }
-
-        private IEnumerable<(RegisterValues values, int pointer)> EnumerateOpcodeUpdates(RegisterValues registerValues, int pointer)
-        {
-            return (registerValues, pointer)
-                .StartEnumerate(v => ApplyOpcode(v.registerValues, v.pointer))
-                .Skip(1)
-                .TakeWhile(v => v.pointer < instructions.Length);
-        }
-
-        private (RegisterValues values, int pointer) ApplyOpcode(RegisterValues registerValues, int pointer)
-        {
-            registerValues = registerValues.UpdateValue(boundedRegister, pointer);
-
-            registerValues = instructions[pointer].UpdateRegisters(registerValues);
-
-            pointer = registerValues[boundedRegister] + 1;
-
-            return (registerValues, pointer);
-        }
-
-        private static int[] FindJumpTargets(RegisterValues values, RegisterValues speed)
-        {
-            var channgingRegisters = speed.Values
-                .Select((v, i) => (v, i))
-                .Where(r => r.v != 0)
-                .Select(r => r.i);
-
-            var possibleJumps = channgingRegisters
-                .SelectMany(registerIndex => Enumerable.Range(0, values.Values.Length)
-                    .Select(i => (values[i] - values[registerIndex]) / speed[registerIndex]))
-                .ToArray();
-
-            return possibleJumps;
         }
     }
 }

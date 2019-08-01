@@ -21,10 +21,5 @@ namespace AdventCodeSolution.Day19
         {
             return Opcode.UpdateRegisters(registerValues, Instruction);
         }
-
-        public void UpdateRegisters(int[] registerValues)
-        {
-            Opcode.UpdateRegisters(registerValues, Instruction);
-        }
     }
 }

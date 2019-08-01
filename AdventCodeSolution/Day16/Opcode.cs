@@ -27,7 +27,6 @@ namespace AdventCodeSolution.Day16
             registerValues[updateCommand.OutputToRegister] = calculateNewRegisterValue(registerValues, updateCommand);
         }
 
-
         public static Opcode Addr { get; } = new Opcode("addr", (v, c) => v[c.ValueA] + v[c.ValueB]);
 
         public static Opcode Addi { get; } = new Opcode("addi", (v, c) => v[c.ValueA] + c.ValueB);

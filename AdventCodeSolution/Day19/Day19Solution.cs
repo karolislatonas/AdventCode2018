@@ -21,17 +21,20 @@ namespace AdventCodeSolution.Day19
 
         public static void SolvePartTwo()
         {
-            var (boundedRegister, instructions) = InstructionParser.ParseInstructions(GetInput());
+            var target = 10551417;
 
-            var registerValues = new RegisterValues(Enumerable.Repeat(0, 6));
-            
-            var registerProcessor = new RegistersProcessor(instructions, boundedRegister);
+            var firstRegisterValue = 1;
+            var fifthRegisterValue = 2;
 
-            registerValues = registerProcessor.Run(registerValues.UpdateValue(0, 1));
+            while (firstRegisterValue < target)
+            {
+                if(target % fifthRegisterValue == 0)
+                    firstRegisterValue += fifthRegisterValue;
 
-            var result = registerValues[0];
+                fifthRegisterValue++;
+            }
 
-            result.WriteLine("Day 19, Part 2: ");
+            firstRegisterValue.WriteLine("Day 19, Part 2: ");
         }
 
         private static string GetInput() => InputResources.Day19Input;
