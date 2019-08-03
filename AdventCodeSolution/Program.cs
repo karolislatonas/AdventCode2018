@@ -1,4 +1,4 @@
-﻿using AdventCodeSolution.Day1;
+﻿using AdventCodeSolution.Day01;
 using AdventCodeSolution.Day10;
 using AdventCodeSolution.Day11;
 using AdventCodeSolution.Day12;
@@ -9,16 +9,16 @@ using AdventCodeSolution.Day16;
 using AdventCodeSolution.Day17;
 using AdventCodeSolution.Day18;
 using AdventCodeSolution.Day19;
-using AdventCodeSolution.Day2;
+using AdventCodeSolution.Day02;
 using AdventCodeSolution.Day20;
 using AdventCodeSolution.Day21;
-using AdventCodeSolution.Day3;
-using AdventCodeSolution.Day4;
-using AdventCodeSolution.Day5;
-using AdventCodeSolution.Day6;
-using AdventCodeSolution.Day7;
-using AdventCodeSolution.Day8;
-using AdventCodeSolution.Day9;
+using AdventCodeSolution.Day03;
+using AdventCodeSolution.Day04;
+using AdventCodeSolution.Day05;
+using AdventCodeSolution.Day06;
+using AdventCodeSolution.Day07;
+using AdventCodeSolution.Day08;
+using AdventCodeSolution.Day09;
 
 namespace AdventCodeSolution
 {

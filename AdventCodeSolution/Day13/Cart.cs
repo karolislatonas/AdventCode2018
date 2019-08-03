@@ -1,5 +1,5 @@
 ﻿using AdventCodeSolution.Day13.IntersectionStates;
-using AdventCodeSolution.Day3;
+using AdventCodeSolution.Day03;
 
 namespace AdventCodeSolution.Day13
 {

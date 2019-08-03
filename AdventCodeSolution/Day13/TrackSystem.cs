@@ -1,6 +1,6 @@
 ﻿using AdventCodeSolution.Day10;
 using AdventCodeSolution.Day13.Tracks;
-using AdventCodeSolution.Day3;
+using AdventCodeSolution.Day03;
 using System.Collections.Generic;
 using System.Linq;
 

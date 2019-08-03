@@ -1,4 +1,4 @@
-﻿using AdventCodeSolution.Day3;
+﻿using AdventCodeSolution.Day03;
 using System.Collections.Generic;
 
 namespace AdventCodeSolution.Day18.Acres

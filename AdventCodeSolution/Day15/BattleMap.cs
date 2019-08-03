@@ -1,6 +1,6 @@
 ﻿using AdventCodeSolution.Day10;
 using AdventCodeSolution.Day15.Players;
-using AdventCodeSolution.Day3;
+using AdventCodeSolution.Day03;
 using System;
 using System.Collections.Generic;
 using System.Linq;
