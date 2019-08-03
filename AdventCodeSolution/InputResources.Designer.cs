@@ -451,6 +451,15 @@ namespace AdventCodeSolution {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Day21Input {
+            get {
+                return ResourceManager.GetString("Day21Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to cvfueihajytpmrdkgsxfqplbxn
         ///cbzueihajytnmrdkgtxfqplbwn
         ///cvzucihajytomrdkgstfqplqwn
