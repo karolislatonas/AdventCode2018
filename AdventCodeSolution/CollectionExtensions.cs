@@ -168,6 +168,29 @@ namespace AdventCodeSolution
                 set.Add(value);
         }
 
+        public static void AddOrUpdate<TValue>(this HashSet<TValue> set, TValue newValue, Func<TValue, TValue, bool> shouldUpdate)
+        {
+            var valueAdded = set.Add(newValue);
+
+            if (valueAdded)
+                return;
+
+            set.TryGetValue(newValue, out var oldValue);
+
+            var shouldUpdateValue = shouldUpdate(newValue, oldValue);
+
+            if (!shouldUpdateValue)
+                return;
+
+            set.AddForce(newValue);
+        }
+        
+        public static void AddForce<TValue>(this HashSet<TValue> set, TValue value)
+        {
+            set.Remove(value);
+            set.Add(value);
+        }
+
         public static IEnumerable<LinkedListNode<TElement>> EnumerateNodes<TElement>(this LinkedList<TElement> linkedList)
         {
             var current = linkedList.First;

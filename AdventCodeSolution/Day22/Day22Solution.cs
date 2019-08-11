@@ -15,7 +15,17 @@ namespace AdventCodeSolution.Day22
             var result = caveScanner.EvaluateRisk(targetLocation);
 
             result.WriteLine("Day 22, Part 1: ");
+        }
 
+        public static void SolvePartTwo()
+        {
+            var (depth, targetLocation) = GetInput();
+
+            var caveScanner = new CaveScanner(depth);
+
+            var result = caveScanner.FindQuickestPathToTarget(targetLocation);
+
+            result.Cost.WriteLine("Day 22, Part 2: ");
         }
 
         public static (int depth, XY targetLocation) GetInput()

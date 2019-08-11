@@ -90,7 +90,8 @@ namespace AdventCodeSolution
             //Day21Solution.SolvePartOne();
             //Day21Solution.SolvePartTwo();
 
-            Day22Solution.SolvePartOne();
+            //Day22Solution.SolvePartOne();
+            Day22Solution.SolvePartTwo();
         }
     }
 }

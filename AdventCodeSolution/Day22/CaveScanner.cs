@@ -1,6 +1,4 @@
 ﻿using AdventCodeSolution.Day03;
-using AdventCodeSolution.Day22.Regions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,10 +6,7 @@ namespace AdventCodeSolution.Day22
 {
     public class CaveScanner
     {
-        private static CaveRegionFactory caveRegionFactory = new CaveRegionFactory();
-        private readonly XY initialLocation = XY.Zero;
         private readonly int depth;
-        
 
         public CaveScanner(int depth)
         {
@@ -20,54 +15,22 @@ namespace AdventCodeSolution.Day22
 
         public int EvaluateRisk(XY targetLocation)
         {
-            var scannedRegions = ScanCave(targetLocation);
+            var cave = new Cave(depth, targetLocation);
 
-            return scannedRegions.Values.Sum(r => r.RiskLevel);
+            var locations = EnumerateRegionLocationsWithoutTarget(cave.InitialLocation, cave.TargetLocation);
+
+            return locations.Select(l => cave[l]).Sum(r => r.RiskLevel);
         }
 
-        private IReadOnlyDictionary<XY, CaveRegion> ScanCave(XY target)
+        public CaveSearch FindQuickestPathToTarget(XY targetLocation)
         {
-            var locationsTillTarget = EnumerateRegionLocationsWithoutTarget(target);
+            var cave = new Cave(depth, targetLocation);
+            var pathFinder = new PathFinder();
 
-            var foundRegions = new Dictionary<XY, CaveRegion>();
-
-            foreach (var location in locationsTillTarget)
-            {
-                var region = DetermineCaveRegion(location, l => foundRegions[l]);
-                foundRegions.Add(location, region);
-            }
-
-            return foundRegions;
+            return pathFinder.FindQuickestPath(cave);
         }
 
-        private CaveRegion DetermineCaveRegion(XY location, Func<XY, CaveRegion> getRegion)
-        {
-            var geologicalIndex = GetGeologicIndex(location, getRegion);
-            var eriosionLevel = CalculateErosionLevel(geologicalIndex);
-
-            return caveRegionFactory.Create(eriosionLevel);
-        }
-
-        private int GetGeologicIndex(XY location, Func<XY, CaveRegion> getRegion)
-        {
-            if (location == XY.Zero)
-                return 0;
-
-            if (location.Y == 0)
-                return location.X * 16807;
-
-            if (location.X == 0)
-                return location.Y * 48271;
-
-            var leftCaveRegion = getRegion(location + XY.Left);
-            var bottomCaveRegion = getRegion(location + XY.Down);
-
-            return leftCaveRegion.ErosionLevel * bottomCaveRegion.ErosionLevel;
-        }
-
-        private int CalculateErosionLevel(int geologicIndex) => (depth + geologicIndex) % 20183;
-
-        private IEnumerable<XY> EnumerateRegionLocationsWithoutTarget(XY target)
+        private IEnumerable<XY> EnumerateRegionLocationsWithoutTarget(XY initialLocation, XY target)
         {
             var targetX = target.X + 1;
 
@@ -81,5 +44,7 @@ namespace AdventCodeSolution.Day22
 
             }).TakeWhile(l => l != target);
         }
+
+
     }
 }
