@@ -11,6 +11,12 @@ namespace AdventCodeSolution.Day22.SearchActions
             this.newEquipment = newEquipment;
         }
 
-        public CaveSearch ApplyAction(CaveSearch caveSearch) => caveSearch.SwitchEquipmentTo(newEquipment);
+        public CaveSearch ApplyAction(CaveSearch caveSearch)
+        {
+            if (caveSearch.Equipment == newEquipment)
+                return caveSearch;
+
+            return caveSearch.SwitchEquipmentTo(newEquipment);
+        }
     }
 }
