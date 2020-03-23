@@ -70,6 +70,29 @@ namespace AdventCodeSolution
                 .ToArray();
         }
 
+        public static T[] MultipleMaxBy<T, TComparable>(this IEnumerable<T> sequence, Func<T, TComparable> getComparable)
+            where TComparable : IComparable<TComparable>
+        {
+            return sequence
+                .Aggregate(new List<T>(), (maxs, c) => {
+                    if (maxs.Count == 0)
+                    {
+                        maxs.Add(c);
+                        return maxs;
+                    }
+
+                    var currentMin = maxs[0];
+                    var comparisonResult = getComparable(currentMin).CompareTo(getComparable(c));
+
+                    if (comparisonResult < 0) return new List<T>() { c };
+
+                    if (comparisonResult == 0) maxs.Add(c);
+
+                    return maxs;
+                })
+                .ToArray();
+        }
+
         public static TResult AggregateOrDefault<TElement, TResult>(this IEnumerable<TElement> sequence, Func<IEnumerable<TElement>, TResult> aggregate, TResult defaultValue)
         {
             return sequence.Any() ? aggregate(sequence) : defaultValue;

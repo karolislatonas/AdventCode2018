@@ -491,11 +491,32 @@ namespace AdventCodeSolution {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to depth: 9171
+        ///target: 7,721.
         /// </summary>
         internal static string Day22Input {
             get {
                 return ResourceManager.GetString("Day22Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to pos=&lt;89743969,58072157,20035651&gt;, r=62659871
+        ///pos=&lt;131313272,84056308,111659651&gt;, r=89015955
+        ///pos=&lt;16432084,54294843,40436139&gt;, r=63963455
+        ///pos=&lt;106096585,65141175,32275537&gt;, r=98321419
+        ///pos=&lt;58606359,51324939,72563158&gt;, r=77302817
+        ///pos=&lt;68068619,70468104,64157135&gt;, r=97502476
+        ///pos=&lt;-6152177,39621847,20839930&gt;, r=66143377
+        ///pos=&lt;84300060,72633200,14475522&gt;, r=66216911
+        ///pos=&lt;15616379,71375254,9750281&gt;, r=58092424
+        ///pos=&lt;21111314,3857628,18227323&gt;, r=72031403
+        ///pos=&lt;117200475,51960464,-366256&gt;, r=90754225
+        ///pos=&lt; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Day23Input {
+            get {
+                return ResourceManager.GetString("Day23Input", resourceCulture);
             }
         }
         
