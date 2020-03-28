@@ -1,4 +1,12 @@
 ﻿using AdventCodeSolution.Day01;
+using AdventCodeSolution.Day02;
+using AdventCodeSolution.Day03;
+using AdventCodeSolution.Day04;
+using AdventCodeSolution.Day05;
+using AdventCodeSolution.Day06;
+using AdventCodeSolution.Day07;
+using AdventCodeSolution.Day08;
+using AdventCodeSolution.Day09;
 using AdventCodeSolution.Day10;
 using AdventCodeSolution.Day11;
 using AdventCodeSolution.Day12;
@@ -9,18 +17,11 @@ using AdventCodeSolution.Day16;
 using AdventCodeSolution.Day17;
 using AdventCodeSolution.Day18;
 using AdventCodeSolution.Day19;
-using AdventCodeSolution.Day02;
 using AdventCodeSolution.Day20;
 using AdventCodeSolution.Day21;
-using AdventCodeSolution.Day03;
-using AdventCodeSolution.Day04;
-using AdventCodeSolution.Day05;
-using AdventCodeSolution.Day06;
-using AdventCodeSolution.Day07;
-using AdventCodeSolution.Day08;
-using AdventCodeSolution.Day09;
 using AdventCodeSolution.Day22;
 using AdventCodeSolution.Day23;
+using AdventCodeSolution.Day24;
 
 namespace AdventCodeSolution
 {
@@ -95,7 +96,9 @@ namespace AdventCodeSolution
             //Day22Solution.SolvePartTwo();
 
             //Day23Solution.SolvePartOne();
-            Day23Solution.SolvePartTwo();
+            //Day23Solution.SolvePartTwo();
+
+            Day24Solution.SolvePartOne();
         }
     }
 }
