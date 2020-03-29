@@ -12,6 +12,11 @@
 
         public UnitsGroup Defender { get; }
 
+        public int DamageToBeDone()
+        {
+            return Attacker.CalculateAttackDamageOnTarget(Defender);
+        }
+
         public void ExecuteAttack()
         {
             Attacker.Attack(Defender);

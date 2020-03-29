@@ -7,6 +7,11 @@ namespace AdventCodeSolution
 {
     public static class CollectionExtensions
     {
+        public static bool IsEmpty<T>(this IEnumerable<T> sequence)
+        {
+            return !sequence.Any();
+        }
+
         public static IEnumerable<T> Infinitely<T>(this IEnumerable<T> sequence)
         {
             while (true)

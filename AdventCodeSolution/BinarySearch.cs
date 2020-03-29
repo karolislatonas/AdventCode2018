@@ -64,7 +64,7 @@ namespace AdventCodeSolution
 
             public int GetLowerMiddle() => (Left + Right) / 2;
 
-            public int GetHigherMiddle() => (int)Math.Ceiling((Left + Right) / 2f);
+            public int GetHigherMiddle() => (Left + Right + 1) / 2;
 
             public LeftRight MakeSmallerInDirection(int direction)
             {

@@ -1,10 +1,11 @@
-﻿using static System.Math;
+﻿using System;
+using static System.Math;
 
 namespace AdventCodeSolution.Day24
 {
     public class UnitsGroup
     {
-        private readonly UnitAttackDetails unitAttackDetails;
+        private UnitAttackDetails unitAttackDetails;
         private readonly ImmunityDetails immunityDetails;
 
         public UnitsGroup(int unitsCount, int unitHitPoints, UnitAttackDetails unitAttackDetails, ImmunityDetails immunityDetails, int initiative)
@@ -17,7 +18,7 @@ namespace AdventCodeSolution.Day24
         }
 
         public int Initiative { get; }
-
+        
         public int UnitsCount { get; private set; }
 
         public int UnitHitPoints { get; }
@@ -25,6 +26,11 @@ namespace AdventCodeSolution.Day24
         public bool IsAlive => UnitsCount > 0;
 
         public int EffectivePower => unitAttackDetails.UnitDamage * UnitsCount;
+
+        public void ChangeUnitDamageBy(int unitDamageChange)
+        {
+            unitAttackDetails = unitAttackDetails.ChangeDamageBy(unitDamageChange);
+        }
 
         public int CalculateAttackDamageOnTarget(UnitsGroup target)
         {

@@ -6,14 +6,7 @@ namespace AdventCodeSolution.Day24
 {
     public class TargetSelector
     {
-        private readonly ImmuneSystem immuneSystem;
-
-        public TargetSelector(ImmuneSystem immuneSystem)
-        {
-            this.immuneSystem = immuneSystem;
-        }
-
-        public UnitAttack[] SelectTargets()
+        public UnitAttack[] SelectTargets(ImmuneSystem immuneSystem)
         {
             var immunitiesAttacks = SelectTargets(immuneSystem.AliveImmunities, immuneSystem.AliveInfections);
             var infectionsAttacks = SelectTargets(immuneSystem.AliveInfections, immuneSystem.AliveImmunities);
@@ -49,6 +42,7 @@ namespace AdventCodeSolution.Day24
                     .MultipleMaxBy(attacker.CalculateAttackDamageOnTarget)
                     .MultipleMaxBy(t => t.EffectivePower)
                     .MultipleMaxBy(t => t.Initiative)
+                    .Where(t => attacker.CalculateAttackDamageOnTarget(t) > 0)
                     .SingleOrDefault();
         }
     }

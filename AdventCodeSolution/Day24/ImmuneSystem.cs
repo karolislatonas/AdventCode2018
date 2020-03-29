@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AdventCodeSolution.Day24
@@ -18,7 +19,7 @@ namespace AdventCodeSolution.Day24
 
         public IEnumerable<UnitsGroup> AliveInfections => FilterAlive(infections);
 
-        public bool BothGroupsRemaining()
+        public bool IsBothGroupsAlive()
         {
             return AliveImmunities.Count() > 0 &&
                    AliveInfections.Count() > 0;
@@ -30,6 +31,12 @@ namespace AdventCodeSolution.Day24
                 .Concat(infections)
                 .Select(g => g.UnitsCount)
                 .Sum();
+        }
+
+        public bool ImmuneSystemSurvived()
+        {
+            return AliveImmunities.Any() &&
+                   AliveInfections.IsEmpty();
         }
 
         private IEnumerable<UnitsGroup> FilterAlive(IEnumerable<UnitsGroup> unitsGroups)

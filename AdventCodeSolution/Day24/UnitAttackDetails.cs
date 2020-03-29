@@ -11,5 +11,10 @@
         public int UnitDamage { get; }
 
         public AttackType AttackType { get; }
+
+        public UnitAttackDetails ChangeDamageBy(int damageChange)
+        {
+            return new UnitAttackDetails(UnitDamage + damageChange, AttackType);
+        }
     }
 }

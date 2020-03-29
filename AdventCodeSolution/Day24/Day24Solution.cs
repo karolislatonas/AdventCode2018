@@ -5,15 +5,9 @@
         public static void SolvePartOne()
         {
             var immuneSystem = ImmuneSystemParser.Parse(GetInput());
-            var targetSelect = new TargetSelector(immuneSystem);
-            var attackExecuter = new AttackExecuter();
+            var immuneSystemSimulator = new ImmuneSystemSimulator();
 
-            do
-            {
-                var unitAttacks = targetSelect.SelectTargets();
-                attackExecuter.ExecuteAttacks(unitAttacks);
-
-            } while (immuneSystem.BothGroupsRemaining());
+            immuneSystemSimulator.Simulate(immuneSystem);
 
             var totalUnitsRemaining = immuneSystem.GetTotalUnitsRemaining();
 
@@ -22,20 +16,13 @@
 
         public static void SolvePartTwo()
         {
-            var immuneSystem = ImmuneSystemParser.Parse(GetInput());
-            var targetSelect = new TargetSelector(immuneSystem);
-            var attackExecuter = new AttackExecuter();
+            var immuneSystemSimulator = new ImmuneSystemSimulator();
 
-            do
-            {
-                var unitAttacks = targetSelect.SelectTargets();
-                attackExecuter.ExecuteAttacks(unitAttacks);
-
-            } while (immuneSystem.BothGroupsRemaining());
+            var immuneSystem = immuneSystemSimulator.FindMinumumBoostForImmunitiesToSurvive(() => ImmuneSystemParser.Parse(GetInput()));
 
             var totalUnitsRemaining = immuneSystem.GetTotalUnitsRemaining();
 
-            totalUnitsRemaining.WriteLine("Day 24, Part 1: ");
+            totalUnitsRemaining.WriteLine("Day 24, Part 2: ");
         }
 
         public static string GetInput() => InputResources.Day24Input;
