@@ -1,49 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace AdventCodeSolution.Day16
 {
-    public class RegisterValues : ValueObject<RegisterValues>
-    {
-        public RegisterValues(IEnumerable<int> values) :
-            this(values.ToArray())
-        {
 
-        }
+    public class RegisterValues
+    {
+        private readonly int[] values;
 
         public RegisterValues(params int[] values) :
-            this(ImmutableArray.Create(values.ToArray()))
+            this(values as IEnumerable<int>)
         {
 
         }
 
-        private RegisterValues(ImmutableArray<int> values)
+        public RegisterValues(IEnumerable<int> values)
         {
-            Values = values;
+            this.values = values.ToArray();
         }
+
+        public RegisterValues Copy() => new RegisterValues(values);
 
         public int this[int registerIndex] => Values[registerIndex];
 
-        public ImmutableArray<int> Values { get; }
+        public IReadOnlyList<int> Values => values;
 
-        public RegisterValues UpdateValue(int registerIndex, int newValue)
+        public void UpdateValue(int registerIndex, int newValue)
         {
-            return new RegisterValues(
-                Values.SetItem(registerIndex, newValue));
+            values[registerIndex] = newValue;
         }
 
-        public override string ToString()
-        {
-            return Values
-                .Select(v => v.ToString())
-                .Aggregate((t, v) => $"{t} {v}");
-        }
+        public override string ToString() => string.Join(' ', values);
 
-        protected override bool EqualsCore(RegisterValues other) => Values.SequenceEqual(other.Values);
-
-        protected override int GetHashCodeCore() => Values.Aggregate(17, (t, c) => t ^ c);
+        public bool AreValuesEqual(RegisterValues other) => Values.SequenceEqual(other.Values);
     }
 }

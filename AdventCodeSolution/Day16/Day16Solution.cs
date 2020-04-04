@@ -23,10 +23,12 @@ namespace AdventCodeSolution.Day16
 
             var opcodeNumbers = FindOpcodeNumbersMeaning(registerResults);
 
-            var initialRegister = new RegisterValues(0, 0, 0, 0);
-            var result = instructions.Aggregate(initialRegister, (r, oi) => opcodeNumbers[oi.OpcodeNumber].UpdateRegisters(r, oi.Instruction));
+            var register = new RegisterValues(0, 0, 0, 0);
 
-            result[0].WriteLine("Day 16, Part 2: ");
+            foreach (var instruction in instructions)
+                opcodeNumbers[instruction.OpcodeNumber].UpdateRegisters(register, instruction.Instruction);
+
+            register[0].WriteLine("Day 16, Part 2: ");
         }
 
         private static Dictionary<int, Opcode> FindOpcodeNumbersMeaning(RegisterSample[] results)
@@ -55,10 +57,17 @@ namespace AdventCodeSolution.Day16
         private static Opcode[] FindMatchingOpcodes(RegisterSample result, Opcode[] opcodes)
         {
             return opcodes
-                .Where(o => o.UpdateRegisters(result.InitialValues, result.OpcodeInstruction.Instruction) == result.UpdatedValues)
+                .Where(o => OpcodeMatches(result, o))
                 .ToArray();
         }
 
+        private static bool OpcodeMatches(RegisterSample sample, Opcode opcode)
+        {
+            var valuesAfterOpcodeApplied = sample.InitialValues.Copy();
+            opcode.UpdateRegisters(valuesAfterOpcodeApplied, sample.OpcodeInstruction.Instruction);
+
+            return valuesAfterOpcodeApplied.AreValuesEqual(sample.UpdatedValues);
+        }
 
         private static RegisterSample[] GetSamplesInput()
         {

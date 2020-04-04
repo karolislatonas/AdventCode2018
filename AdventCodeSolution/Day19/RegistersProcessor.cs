@@ -13,22 +13,19 @@ namespace AdventCodeSolution.Day19
             this.instructions = instructions;
         }
 
-        public RegisterValues Run(RegisterValues initialRegisterValues)
+        public void Run(RegisterValues registerValues)
         {
             var pointer = 0;
-            var registerValues = initialRegisterValues;
 
             do
             {
-                registerValues = registerValues.UpdateValue(boundedRegister, pointer);
+                registerValues.UpdateValue(boundedRegister, pointer);
 
-                registerValues = instructions[pointer].UpdateRegisters(registerValues);
+                instructions[pointer].UpdateRegisters(registerValues);
 
                 pointer = registerValues[boundedRegister] + 1;
 
             } while (pointer < instructions.Length);
-
-            return registerValues;
         }
     }
 }

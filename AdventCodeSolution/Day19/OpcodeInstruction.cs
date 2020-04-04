@@ -17,9 +17,9 @@ namespace AdventCodeSolution.Day19
 
         public RegisterInstruction Instruction { get; }
 
-        public RegisterValues UpdateRegisters(RegisterValues registerValues)
+        public void UpdateRegisters(RegisterValues registerValues)
         {
-            return Opcode.UpdateRegisters(registerValues, Instruction);
+            Opcode.UpdateRegisters(registerValues, Instruction);
         }
     }
 }

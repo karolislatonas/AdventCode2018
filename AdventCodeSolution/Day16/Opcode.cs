@@ -5,9 +5,9 @@ namespace AdventCodeSolution.Day16
 {
     public class Opcode
     {
-        private readonly Func<IList<int>, RegisterInstruction, int> calculateNewRegisterValue;
+        private readonly Func<IReadOnlyList<int>, RegisterInstruction, int> calculateNewRegisterValue;
 
-        protected Opcode(string name, Func<IList<int>, RegisterInstruction, int> calculateNewRegisterValue)
+        protected Opcode(string name, Func<IReadOnlyList<int>, RegisterInstruction, int> calculateNewRegisterValue)
         {
             Name = name;
             this.calculateNewRegisterValue = calculateNewRegisterValue;
@@ -15,11 +15,11 @@ namespace AdventCodeSolution.Day16
 
         public string Name { get; }
 
-        public RegisterValues UpdateRegisters(RegisterValues registerValues, RegisterInstruction updateCommand)
+        public void UpdateRegisters(RegisterValues registerValues, RegisterInstruction updateCommand)
         {
             var newRegisterValue = calculateNewRegisterValue(registerValues.Values, updateCommand);
 
-            return registerValues.UpdateValue(updateCommand.OutputToRegister, newRegisterValue);
+            registerValues.UpdateValue(updateCommand.OutputToRegister, newRegisterValue);
         }
 
         public static Opcode Addr { get; } = new Opcode("addr", (v, c) => v[c.ValueA] + v[c.ValueB]);

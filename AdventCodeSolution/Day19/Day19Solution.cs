@@ -9,10 +9,10 @@ namespace AdventCodeSolution.Day19
         {
             var (boundedRegister, instructions) = InstructionParser.ParseInstructions(GetInput());
 
-            var initialRegisterValues = new RegisterValues(Enumerable.Repeat(0, 6).ToArray());
+            var registerValues = new RegisterValues(Enumerable.Repeat(0, 6).ToArray());
             var registerProcessor = new RegistersProcessor(instructions, boundedRegister);
 
-            var registerValues = registerProcessor.Run(initialRegisterValues);
+            registerProcessor.Run(registerValues);
 
             var result = registerValues[0];
 
