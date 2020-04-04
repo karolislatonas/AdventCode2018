@@ -22,6 +22,7 @@ using AdventCodeSolution.Day21;
 using AdventCodeSolution.Day22;
 using AdventCodeSolution.Day23;
 using AdventCodeSolution.Day24;
+using AdventCodeSolution.Day25;
 
 namespace AdventCodeSolution
 {
@@ -99,7 +100,9 @@ namespace AdventCodeSolution
             //Day23Solution.SolvePartTwo();
 
             //Day24Solution.SolvePartOne();
-            Day24Solution.SolvePartTwo();
+            //Day24Solution.SolvePartTwo();
+
+            Day25Solution.SolvePartOne();
         }
     }
 }
